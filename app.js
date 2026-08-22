@@ -36,8 +36,8 @@ function populateAirports() {
 
 function updateDestinations() {
   const prices = state.prices.filter((item) => item.airport === $("#airport").value);
-  setOptions($("#destination"), unique(prices.map((item) => item.destination)), "اختر الوجهة");
-  setOptions($("#vehicle"), [], "اختر المركبة");
+  setOptions($("#destination"), unique(prices.map((item) => item.destination)), "اختر الوجهة أو المعبر");
+  setOptions($("#vehicle"), [], "اختر السيارة");
   updatePrice();
 }
 
@@ -45,7 +45,7 @@ function updateVehicles() {
   const prices = state.prices.filter(
     (item) => item.airport === $("#airport").value && item.destination === $("#destination").value,
   );
-  setOptions($("#vehicle"), unique(prices.map((item) => item.vehicle)), "اختر المركبة");
+  setOptions($("#vehicle"), unique(prices.map((item) => item.vehicle)), "اختر السيارة");
   updatePrice();
 }
 
@@ -66,7 +66,8 @@ function updatePrice() {
   const complete = $("#airport").value && $("#destination").value && $("#vehicle").value;
   if (price) {
     $("#price-value").textContent = `$${Number(price.price).toLocaleString("en-US")}`;
-    $("#price-note").textContent = `لـ ${price.min_passengers}–${price.max_passengers} ركاب`;
+    $("#price-note").textContent =
+      `${price.vehicle} — سيارة واحدة لـ ${price.min_passengers}–${price.max_passengers} ركاب`;
     $("#price-box").classList.add("has-price");
   } else {
     $("#price-value").textContent = complete ? "حسب الطلب" : "—";
@@ -96,12 +97,13 @@ function submitBooking(event) {
     `الاسم: ${$("#name").value}`,
     `الهاتف: ${$("#phone").value}`,
     `المطار: ${$("#airport").value}`,
-    `الوجهة: ${$("#destination").value}`,
-    `المركبة: ${$("#vehicle").value}`,
+    `الوجهة / المعبر: ${$("#destination").value}`,
+    `موديل / نوع السيارة: ${$("#vehicle").value}`,
     `عدد الركاب: ${$("#passengers").value}`,
+    "طريقة الرحلة: مرحلة واحدة - نفس السيارة دون تبديل",
     `الموعد: ${dateText}`,
     `رقم الرحلة: ${$("#flight").value || "غير مذكور"}`,
-    `السعر الظاهر: ${price ? `$${price.price}` : "حسب الطلب"}`,
+    `سعر السيارة كاملة: ${price ? `$${price.price}` : "حسب الطلب"}`,
     `ملاحظات: ${$("#notes").value || "لا يوجد"}`,
     "",
     "أرجو تأكيد توفر السيارة والحجز.",
