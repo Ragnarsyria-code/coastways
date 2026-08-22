@@ -1,7 +1,7 @@
 const REPOSITORY = "Ragnarsyria-code/coastways";
 const FILE_PATH = "docs/prices.json";
 const DATA_BRANCH = "site-data";
-const state = { prices: [], whatsapp: "", sha: "", token: "" };
+const state = { prices: [], whatsapp: "", updatedAt: 0, sha: "", token: "" };
 const $ = (selector) => document.querySelector(selector);
 
 function decodeContent(content) {
@@ -54,6 +54,7 @@ async function loadCatalog() {
   state.sha = file.sha;
   state.prices = catalog.prices.map((price) => ({ ...price, stages: price.stages || 1 }));
   state.whatsapp = catalog.whatsapp;
+  state.updatedAt = catalog.updated_at || 0;
   $("#whatsapp-input").value = catalog.whatsapp;
   $("#whatsapp-display").textContent = `+${catalog.whatsapp}`;
   $("#prices-count").textContent = catalog.prices.length;
@@ -62,13 +63,19 @@ async function loadCatalog() {
 }
 
 async function publishCatalog(message) {
-  const content = encodeContent({ prices: state.prices, whatsapp: state.whatsapp });
+  const updatedAt = Date.now();
+  const content = encodeContent({
+    prices: state.prices,
+    whatsapp: state.whatsapp,
+    updated_at: updatedAt,
+  });
   const result = await githubRequest({
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message, content, sha: state.sha, branch: DATA_BRANCH }),
   });
   state.sha = result.content.sha;
+  state.updatedAt = updatedAt;
   toast("تم الحفظ والنشر، ستظهر التغييرات خلال دقيقة");
 }
 
