@@ -1,6 +1,6 @@
 const state = { prices: [], whatsapp: "963999597094" };
 const CATALOG_URL =
-  "https://raw.githubusercontent.com/Ragnarsyria-code/coastways/main/docs/prices.json";
+  "https://raw.githubusercontent.com/Ragnarsyria-code/coastways/site-data/docs/prices.json";
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
