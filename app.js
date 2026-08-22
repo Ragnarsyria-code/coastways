@@ -160,8 +160,16 @@ function updatePrice() {
 }
 
 function updateWhatsappLinks() {
+  const digits = String(state.whatsapp).replace(/\D/g, "");
+  const displayNumber =
+    digits.startsWith("963") && digits.length === 12
+      ? `+963 ${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9)}`
+      : `+${digits}`;
   $$("[data-whatsapp-link]").forEach((link) => {
     link.href = `https://wa.me/${state.whatsapp}?text=${encodeURIComponent("مرحباً دروب الساحل، أريد الاستفسار عن رحلة.")}`;
+  });
+  $$("[data-whatsapp-number]").forEach((number) => {
+    number.textContent = displayNumber;
   });
 }
 

@@ -57,7 +57,14 @@ svg { width: 100%; height: 100%; fill: currentColor; }
   background: var(--green);
   box-shadow: 0 0 0 5px rgba(32, 199, 99, 0.12);
 }
-.topbar a { color: var(--gold-light); }
+.topbar a { color: var(--gold-light); display: inline-flex; align-items: center; gap: 5px; }
+.phone-number {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  font-family: "Tajawal", sans-serif;
+  letter-spacing: 0.02em;
+}
 
 .hero-shell {
   min-height: 760px;
@@ -222,6 +229,8 @@ svg { width: 100%; height: 100%; fill: currentColor; }
   gap: 13px;
   background: rgba(4, 19, 29, 0.68);
   backdrop-filter: blur(14px);
+  transform-style: preserve-3d;
+  animation: status-float 4.5s ease-in-out infinite;
 }
 .status-icon {
   width: 39px;
@@ -631,6 +640,102 @@ footer { padding: 76px 30px 22px; color: #b5c4ca; background: var(--navy-950); }
 }
 .whatsapp-float span { font-size: 18px; }
 
+/* Motion and depth */
+.scroll-progress {
+  position: fixed;
+  z-index: 100;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  transform: scaleX(0);
+  transform-origin: right;
+  pointer-events: none;
+}
+.motion-enabled .hero-copy {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.25s ease-out;
+  animation: hero-arrive 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.motion-enabled .hero-status { will-change: transform; }
+.motion-enabled .reveal-item {
+  opacity: 0;
+  transform: translate3d(0, 38px, 0) scale(0.985);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+}
+.motion-enabled .reveal-item.revealed { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+.tilt-surface {
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+.tilt-surface .service-top,
+.tilt-surface h3,
+.tilt-surface .capacity,
+.tilt-surface .airport-code {
+  transform: translateZ(22px);
+}
+.service-card::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(211, 175, 97, 0.15), transparent 40%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.service-card:hover::before { opacity: 1; }
+.service-card > * { position: relative; z-index: 1; }
+.fleet-image {
+  transform-style: preserve-3d;
+  overflow: hidden;
+}
+.fleet-image::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 160px;
+  height: 160px;
+  right: 34px;
+  top: 34px;
+  border: 1px solid rgba(240, 217, 159, 0.3);
+  border-radius: 50%;
+  box-shadow: 0 0 0 25px rgba(240, 217, 159, 0.045), 0 0 0 50px rgba(240, 217, 159, 0.02);
+  animation: orbit-pulse 4s ease-in-out infinite;
+}
+.primary-btn, .nav-cta, .whatsapp-btn { position: relative; overflow: hidden; isolation: isolate; }
+.primary-btn::after, .nav-cta::after, .whatsapp-btn::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 35%;
+  height: 250%;
+  top: -70%;
+  right: -60%;
+  background: rgba(255, 255, 255, 0.25);
+  transform: rotate(22deg);
+  animation: button-shine 4.8s ease-in-out infinite;
+}
+@keyframes hero-arrive {
+  from { opacity: 0; transform: translate3d(0, 35px, 0) rotateX(-3deg); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) rotateX(0); }
+}
+@keyframes status-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotateY(-3deg); }
+  50% { transform: translate3d(0, -9px, 18px) rotateY(2deg); }
+}
+@keyframes orbit-pulse {
+  0%, 100% { transform: scale(0.92) rotate(0); opacity: 0.55; }
+  50% { transform: scale(1.06) rotate(12deg); opacity: 1; }
+}
+@keyframes button-shine {
+  0%, 68% { right: -60%; }
+  82%, 100% { right: 135%; }
+}
+
 /* Admin */
 .hidden { display: none !important; }
 .admin-body {
@@ -839,4 +944,14 @@ dialog .direct-trip-note { margin: 19px 0 0; }
   .settings-panel input { width: 100%; }
   .dark-btn { min-height: 44px; }
   dialog form { padding: 24px 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .motion-enabled .reveal-item { opacity: 1; transform: none; }
 }
