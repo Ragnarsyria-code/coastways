@@ -18,5 +18,6 @@
     {"id": 16, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جسر قمار", "stages": 2, "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 190},
     {"id": 17, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جسر قمار", "stages": 2, "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 170}
   ],
-  "whatsapp": "963999597094"
+  "whatsapp": "963999597094",
+  "updated_at": 1787432409331
 }

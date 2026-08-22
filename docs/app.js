@@ -5,14 +5,19 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 async function loadCatalog() {
-  let response;
-  try {
-    response = await fetch(`${CATALOG_URL}?v=${Date.now()}`, { cache: "no-store" });
-    if (!response.ok) throw new Error("Remote catalog unavailable");
-  } catch {
-    response = await fetch("./prices.json", { cache: "no-store" });
-  }
-  const catalog = await response.json();
+  const requests = [
+    fetch("./prices.json", { cache: "no-store" }).then((response) => response.json()),
+    fetch(`${CATALOG_URL}?v=${Date.now()}`, { cache: "no-store" }).then((response) => {
+      if (!response.ok) throw new Error("Remote catalog unavailable");
+      return response.json();
+    }),
+  ];
+  const results = await Promise.allSettled(requests);
+  const catalogs = results
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => result.value);
+  if (!catalogs.length) throw new Error("Catalog unavailable");
+  const catalog = catalogs.sort((a, b) => (b.updated_at || 0) - (a.updated_at || 0))[0];
   state.prices = catalog.prices.map((price) => ({ ...price, stages: price.stages || 1 }));
   state.whatsapp = catalog.whatsapp;
   populateAirports();
