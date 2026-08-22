@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>إدارة دروب الساحل</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="admin-body">
+    <section class="login-shell" id="login-view">
+      <form class="login-card" id="login-form">
+        <img src="../assets/logo.jpg" alt="دروب الساحل" />
+        <span class="eyebrow">لوحة الإدارة</span>
+        <h1>مرحباً بعودتك</h1>
+        <p>أدخل رمز GitHub المخصص للمستودع لتعديل الأسعار ونشرها.</p>
+        <label><span>رمز GitHub</span><input id="token" type="password" required autofocus autocomplete="off" /></label>
+        <button class="primary-btn" type="submit">دخول آمن <span>←</span></button>
+        <p class="error" id="login-error"></p>
+        <a class="back-link" href="https://github.com/settings/personal-access-tokens/new" target="_blank">إنشاء رمز بصلاحية Contents للمستودع</a>
+        <br /><a class="back-link" href="../">العودة إلى الموقع</a>
+      </form>
+    </section>
+
+    <div class="admin-app hidden" id="admin-view">
+      <aside class="admin-sidebar">
+        <img src="../assets/logo.jpg" alt="دروب الساحل" />
+        <nav>
+          <button class="active">◈ إدارة الأسعار</button>
+          <a href="../" target="_blank">↗ فتح الموقع</a>
+        </nav>
+        <button class="logout-btn" id="logout">تسجيل الخروج</button>
+      </aside>
+      <main class="admin-main">
+        <header class="admin-header">
+          <div><span>لوحة التحكم</span><h1>أسعار الرحلات</h1></div>
+          <button class="primary-btn" id="add-price">+ إضافة سعر جديد</button>
+        </header>
+        <section class="stats-row">
+          <article><small>عدد الأسعار</small><strong id="prices-count">0</strong></article>
+          <article><small>المطارات</small><strong id="airports-count">0</strong></article>
+          <article><small>رقم واتساب</small><strong id="whatsapp-display">—</strong></article>
+        </section>
+        <section class="admin-panel">
+          <div class="panel-top">
+            <div><h2>قائمة الأسعار</h2><p>عدّل السعر ثم اضغط حفظ، أو أضف مساراً جديداً.</p></div>
+            <input id="search" type="search" placeholder="بحث عن مطار أو وجهة..." />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>المطار</th><th>الوجهة</th><th>المركبة</th><th>الركاب</th><th>السعر</th><th>الإجراء</th></tr></thead>
+              <tbody id="prices-table"></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="admin-panel settings-panel">
+          <div><h2>رقم استقبال الحجوزات</h2><p>اكتب الرقم مع رمز الدولة بدون + أو مسافات.</p></div>
+          <form id="settings-form"><input id="whatsapp-input" inputmode="numeric" required /><button class="dark-btn">حفظ الرقم</button></form>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="price-dialog">
+      <form id="price-form">
+        <div class="dialog-head"><div><small id="dialog-mode">سعر جديد</small><h2>تفاصيل الرحلة</h2></div><button type="button" id="close-dialog">×</button></div>
+        <input id="price-id" type="hidden" />
+        <div class="form-grid">
+          <label><span>المطار</span><input id="edit-airport" required list="airports-list" /></label>
+          <label><span>الوجهة</span><input id="edit-destination" required /></label>
+          <label><span>نوع المركبة</span><input id="edit-vehicle" required list="vehicles-list" /></label>
+          <label><span>السعر بالدولار</span><input id="edit-price" type="number" min="1" step="0.01" required /></label>
+          <label><span>الحد الأدنى للركاب</span><input id="edit-min" type="number" min="1" max="50" required /></label>
+          <label><span>الحد الأعلى للركاب</span><input id="edit-max" type="number" min="1" max="50" required /></label>
+        </div>
+        <button class="primary-btn full-btn" type="submit">حفظ السعر</button>
+      </form>
+    </dialog>
+    <datalist id="airports-list"><option value="مطار اللاذقية"></option><option value="مطار دمشق"></option><option value="مطار حلب"></option><option value="مطار بيروت"></option></datalist>
+    <datalist id="vehicles-list"><option value="تكسي"></option><option value="فان"></option><option value="ميني باص"></option></datalist>
+    <div class="toast" id="toast"></div>
+    <script src="./admin.js"></script>
+  </body>
+</html>
