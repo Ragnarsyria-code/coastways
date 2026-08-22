@@ -1,0 +1,1 @@
+"""Coast Ways booking application."""
