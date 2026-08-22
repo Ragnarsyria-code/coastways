@@ -1,5 +1,6 @@
 const REPOSITORY = "Ragnarsyria-code/coastways";
 const FILE_PATH = "docs/prices.json";
+const DATA_BRANCH = "site-data";
 const state = { prices: [], whatsapp: "", sha: "", token: "" };
 const $ = (selector) => document.querySelector(selector);
 
@@ -20,7 +21,8 @@ function encodeContent(data) {
 }
 
 async function githubRequest(options = {}) {
-  const response = await fetch(`https://api.github.com/repos/${REPOSITORY}/contents/${FILE_PATH}`, {
+  const query = options.method === "PUT" ? "" : `?ref=${DATA_BRANCH}`;
+  const response = await fetch(`https://api.github.com/repos/${REPOSITORY}/contents/${FILE_PATH}${query}`, {
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${state.token}`,
@@ -64,7 +66,7 @@ async function publishCatalog(message) {
   const result = await githubRequest({
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, content, sha: state.sha, branch: "main" }),
+    body: JSON.stringify({ message, content, sha: state.sha, branch: DATA_BRANCH }),
   });
   state.sha = result.content.sha;
   toast("تم الحفظ والنشر، ستظهر التغييرات خلال دقيقة");
