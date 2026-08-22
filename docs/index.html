@@ -143,7 +143,7 @@
             <div><small>حجز جديد</small><h3>تفاصيل الرحلة</h3></div>
             <span class="secure">حجز آمن</span>
           </div>
-          <p class="direct-trip-note">مرحلة واحدة: نفس السيارة من المطار إلى الوجهة دون تبديل.</p>
+          <p class="direct-trip-note">مرحلة واحدة = سيارة واحدة دون تبديل. مرحلتان = سيارتان مع تبديل عند المعبر.</p>
           <div class="form-grid">
             <label>
               <span>الاسم الكامل</span>
@@ -160,6 +160,10 @@
             <label>
               <span>الوجهة / المعبر</span>
               <select id="destination" required disabled><option value="">اختر الوجهة أو المعبر</option></select>
+            </label>
+            <label>
+              <span>عدد مراحل الرحلة</span>
+              <select id="stages" required disabled><option value="">اختر عدد المراحل</option></select>
             </label>
             <label>
               <span>موديل / نوع السيارة</span>
@@ -183,14 +187,14 @@
             <textarea id="notes" rows="3" placeholder="عدد الحقائب، عنوان التوصيل، أو أي طلب خاص"></textarea>
           </label>
           <div class="price-box" id="price-box">
-            <div><span>سعر السيارة كاملة</span><small id="price-note">اختر تفاصيل الرحلة</small></div>
+            <div><span>سعر الرحلة كاملة</span><small id="price-note">اختر تفاصيل الرحلة</small></div>
             <strong id="price-value">—</strong>
           </div>
           <button class="whatsapp-btn" id="submit-booking" type="submit" disabled>
             <span>إرسال الحجز عبر واتساب</span>
             <b>◀</b>
           </button>
-          <p class="form-footnote">السعر لسيارة واحدة في مرحلة واحدة، ويُؤكد الحجز عبر واتساب.</p>
+          <p class="form-footnote">السعر للرحلة كاملة حسب عدد المراحل، ويُؤكد الحجز عبر واتساب.</p>
         </form>
       </section>
     </main>
