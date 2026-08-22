@@ -1,6 +1,30 @@
 const state = { prices: [], whatsapp: "963999597094" };
 const CATALOG_URL =
   "https://raw.githubusercontent.com/Ragnarsyria-code/coastways/site-data/docs/prices.json";
+const CUSTOM_DESTINATION = "وجهة / معبر آخر — اكتبها يدوياً";
+const AIRPORTS = ["مطار اللاذقية", "مطار دمشق", "مطار حلب", "مطار بيروت"];
+const COAST_DESTINATIONS = [
+  "اللاذقية",
+  "جبلة",
+  "القرداحة",
+  "الحفة",
+  "بانياس",
+  "طرطوس",
+  "صافيتا",
+  "حمص",
+  "دمشق",
+  "حلب",
+];
+const BEIRUT_DESTINATIONS = [
+  ...COAST_DESTINATIONS,
+  "اللاذقية عبر معبر جوسيه",
+  "اللاذقية عبر معبر المصنع",
+  "اللاذقية عبر معبر جسر قمار",
+  "طرطوس عبر معبر جوسيه",
+  "طرطوس عبر معبر المصنع",
+  "طرطوس عبر معبر جسر قمار",
+];
+const DEFAULT_VEHICLES = ["تكسي", "سوناتا", "أوبتيما", "جيب توسان", "فان"];
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
@@ -48,22 +72,44 @@ function setStageOptions(values) {
 }
 
 function populateAirports() {
-  setOptions($("#airport"), unique(state.prices.map((item) => item.airport)), "اختر المطار");
+  setOptions(
+    $("#airport"),
+    unique([...AIRPORTS, ...state.prices.map((item) => item.airport)]),
+    "اختر المطار",
+  );
+}
+
+function destinationValue() {
+  return $("#destination").value === CUSTOM_DESTINATION
+    ? $("#custom-destination").value.trim()
+    : $("#destination").value;
+}
+
+function toggleCustomDestination() {
+  const custom = $("#destination").value === CUSTOM_DESTINATION;
+  $("#custom-destination-field").classList.toggle("hidden", !custom);
+  $("#custom-destination").required = custom;
+  if (!custom) $("#custom-destination").value = "";
 }
 
 function updateDestinations() {
-  const prices = state.prices.filter((item) => item.airport === $("#airport").value);
-  setOptions($("#destination"), unique(prices.map((item) => item.destination)), "اختر الوجهة أو المعبر");
+  const airport = $("#airport").value;
+  const prices = state.prices.filter((item) => item.airport === airport);
+  const standardDestinations = airport === "مطار بيروت" ? BEIRUT_DESTINATIONS : COAST_DESTINATIONS;
+  setOptions(
+    $("#destination"),
+    unique([...standardDestinations, ...prices.map((item) => item.destination), CUSTOM_DESTINATION]),
+    "اختر الوجهة أو المعبر",
+  );
+  toggleCustomDestination();
   setStageOptions([]);
   setOptions($("#vehicle"), [], "اختر السيارة");
   updatePrice();
 }
 
 function updateStages() {
-  const prices = state.prices.filter(
-    (item) => item.airport === $("#airport").value && item.destination === $("#destination").value,
-  );
-  setStageOptions(unique(prices.map((item) => item.stages)).sort());
+  toggleCustomDestination();
+  setStageOptions($("#destination").value ? [1, 2] : []);
   setOptions($("#vehicle"), [], "اختر السيارة");
   updatePrice();
 }
@@ -72,10 +118,14 @@ function updateVehicles() {
   const prices = state.prices.filter(
     (item) =>
       item.airport === $("#airport").value &&
-      item.destination === $("#destination").value &&
+      item.destination === destinationValue() &&
       item.stages === Number($("#stages").value),
   );
-  setOptions($("#vehicle"), unique(prices.map((item) => item.vehicle)), "اختر السيارة");
+  setOptions(
+    $("#vehicle"),
+    unique([...prices.map((item) => item.vehicle), ...DEFAULT_VEHICLES]),
+    "اختر السيارة",
+  );
   updatePrice();
 }
 
@@ -84,7 +134,7 @@ function selectedPrice() {
   return state.prices.find(
     (item) =>
       item.airport === $("#airport").value &&
-      item.destination === $("#destination").value &&
+      item.destination === destinationValue() &&
       item.stages === Number($("#stages").value) &&
       item.vehicle === $("#vehicle").value &&
       passengers >= item.min_passengers &&
@@ -95,7 +145,7 @@ function selectedPrice() {
 function updatePrice() {
   const price = selectedPrice();
   const complete =
-    $("#airport").value && $("#destination").value && $("#stages").value && $("#vehicle").value;
+    $("#airport").value && destinationValue() && $("#stages").value && $("#vehicle").value;
   if (price) {
     $("#price-value").textContent = `$${Number(price.price).toLocaleString("en-US")}`;
     $("#price-note").textContent =
@@ -129,7 +179,7 @@ function submitBooking(event) {
     `الاسم: ${$("#name").value}`,
     `الهاتف: ${$("#phone").value}`,
     `المطار: ${$("#airport").value}`,
-    `الوجهة / المعبر: ${$("#destination").value}`,
+    `الوجهة / المعبر: ${destinationValue()}`,
     `موديل / نوع السيارة: ${$("#vehicle").value}`,
     `عدد الركاب: ${$("#passengers").value}`,
     `طريقة الرحلة: ${stageLabel($("#stages").value)}`,
@@ -151,6 +201,7 @@ function setMinimumDate() {
 
 $("#airport").addEventListener("change", updateDestinations);
 $("#destination").addEventListener("change", updateStages);
+$("#custom-destination").addEventListener("input", updatePrice);
 $("#stages").addEventListener("change", updateVehicles);
 $("#vehicle").addEventListener("change", updatePrice);
 $("#passengers").addEventListener("input", updatePrice);
