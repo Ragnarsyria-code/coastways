@@ -15,8 +15,7 @@ const COAST_DESTINATIONS = [
   "دمشق",
   "حلب",
 ];
-const BEIRUT_DESTINATIONS = [
-  ...COAST_DESTINATIONS,
+const BEIRUT_CROSSING_DESTINATIONS = [
   "اللاذقية عبر معبر جوسيه",
   "اللاذقية عبر معبر المصنع",
   "اللاذقية عبر معبر جسر قمار",
@@ -24,6 +23,7 @@ const BEIRUT_DESTINATIONS = [
   "طرطوس عبر معبر المصنع",
   "طرطوس عبر معبر جسر قمار",
 ];
+const BEIRUT_DESTINATIONS = [...BEIRUT_CROSSING_DESTINATIONS, ...COAST_DESTINATIONS];
 const DEFAULT_VEHICLES = ["تكسي", "سوناتا", "أوبتيما", "جيب توسان", "فان"];
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
