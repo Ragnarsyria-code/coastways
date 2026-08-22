@@ -1,9 +1,17 @@
 const state = { prices: [], whatsapp: "963999597094" };
+const CATALOG_URL =
+  "https://raw.githubusercontent.com/Ragnarsyria-code/coastways/main/docs/prices.json";
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 async function loadCatalog() {
-  const response = await fetch("./prices.json", { cache: "no-store" });
+  let response;
+  try {
+    response = await fetch(`${CATALOG_URL}?v=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) throw new Error("Remote catalog unavailable");
+  } catch {
+    response = await fetch("./prices.json", { cache: "no-store" });
+  }
   const catalog = await response.json();
   state.prices = catalog.prices;
   state.whatsapp = catalog.whatsapp;
