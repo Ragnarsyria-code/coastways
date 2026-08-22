@@ -45,12 +45,12 @@
         </section>
         <section class="admin-panel">
           <div class="panel-top">
-            <div><h2>قائمة الأسعار</h2><p>عدّل السعر ثم اضغط حفظ، أو أضف مساراً جديداً.</p></div>
-            <input id="search" type="search" placeholder="بحث عن مطار أو وجهة..." />
+            <div><h2>قائمة الأسعار</h2><p>كل سعر لسيارة واحدة في مرحلة واحدة دون تبديل.</p></div>
+            <input id="search" type="search" placeholder="بحث عن مطار أو مسار أو سيارة..." />
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>المطار</th><th>الوجهة</th><th>المركبة</th><th>الركاب</th><th>السعر</th><th>الإجراء</th></tr></thead>
+              <thead><tr><th>المطار</th><th>الوجهة / المعبر</th><th>موديل السيارة</th><th>الركاب</th><th>سعر السيارة</th><th>الإجراء</th></tr></thead>
               <tbody id="prices-table"></tbody>
             </table>
           </div>
@@ -68,17 +68,19 @@
         <input id="price-id" type="hidden" />
         <div class="form-grid">
           <label><span>المطار</span><input id="edit-airport" required list="airports-list" /></label>
-          <label><span>الوجهة</span><input id="edit-destination" required /></label>
-          <label><span>نوع المركبة</span><input id="edit-vehicle" required list="vehicles-list" /></label>
-          <label><span>السعر بالدولار</span><input id="edit-price" type="number" min="1" step="0.01" required /></label>
+          <label><span>الوجهة / المعبر</span><input id="edit-destination" required list="destinations-list" /></label>
+          <label><span>موديل / نوع السيارة</span><input id="edit-vehicle" required list="vehicles-list" /></label>
+          <label><span>سعر السيارة بالدولار</span><input id="edit-price" type="number" min="1" step="0.01" required /></label>
           <label><span>الحد الأدنى للركاب</span><input id="edit-min" type="number" min="1" max="50" required /></label>
           <label><span>الحد الأعلى للركاب</span><input id="edit-max" type="number" min="1" max="50" required /></label>
         </div>
+        <p class="direct-trip-note">السعر المدخل هو لسيارة واحدة تنقل المسافر في مرحلة واحدة دون تبديل.</p>
         <button class="primary-btn full-btn" type="submit">حفظ السعر</button>
       </form>
     </dialog>
     <datalist id="airports-list"><option value="مطار اللاذقية"></option><option value="مطار دمشق"></option><option value="مطار حلب"></option><option value="مطار بيروت"></option></datalist>
-    <datalist id="vehicles-list"><option value="تكسي"></option><option value="فان"></option><option value="ميني باص"></option></datalist>
+    <datalist id="destinations-list"><option value="اللاذقية"></option><option value="طرطوس"></option><option value="اللاذقية عبر معبر جوسيه"></option><option value="اللاذقية عبر معبر المصنع"></option></datalist>
+    <datalist id="vehicles-list"><option value="سوناتا"></option><option value="تكسي"></option><option value="أوبتيما"></option><option value="جيب توسان"></option><option value="فان"></option></datalist>
     <div class="toast" id="toast"></div>
     <script src="./admin.js"></script>
   </body>

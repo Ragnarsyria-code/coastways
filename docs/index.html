@@ -131,10 +131,10 @@
         <div class="booking-copy">
           <span class="eyebrow">خطوات قليلة تفصلك عن رحلتك</span>
           <h2>احجز استقبالك<br />من المطار الآن</h2>
-          <p>اختر تفاصيل رحلتك، وسيظهر السعر المتاح ثم أرسل الطلب مباشرة عبر واتساب.</p>
+          <p>اختر المطار والمسار وموديل السيارة، وسيظهر سعر السيارة كاملة ثم أرسل الطلب مباشرة عبر واتساب.</p>
           <ul>
-            <li><span>01</span> اختر المطار والوجهة</li>
-            <li><span>02</span> حدد المركبة وعدد الركاب</li>
+            <li><span>01</span> اختر المطار والوجهة أو المعبر</li>
+            <li><span>02</span> حدد موديل السيارة وعدد الركاب</li>
             <li><span>03</span> أرسل الطلب وثبّت الحجز</li>
           </ul>
         </div>
@@ -143,6 +143,7 @@
             <div><small>حجز جديد</small><h3>تفاصيل الرحلة</h3></div>
             <span class="secure">حجز آمن</span>
           </div>
+          <p class="direct-trip-note">مرحلة واحدة: نفس السيارة من المطار إلى الوجهة دون تبديل.</p>
           <div class="form-grid">
             <label>
               <span>الاسم الكامل</span>
@@ -157,12 +158,12 @@
               <select id="airport" required><option value="">اختر المطار</option></select>
             </label>
             <label>
-              <span>الوجهة</span>
-              <select id="destination" required disabled><option value="">اختر الوجهة</option></select>
+              <span>الوجهة / المعبر</span>
+              <select id="destination" required disabled><option value="">اختر الوجهة أو المعبر</option></select>
             </label>
             <label>
-              <span>نوع المركبة</span>
-              <select id="vehicle" required disabled><option value="">اختر المركبة</option></select>
+              <span>موديل / نوع السيارة</span>
+              <select id="vehicle" required disabled><option value="">اختر السيارة</option></select>
             </label>
             <label>
               <span>عدد الركاب</span>
@@ -182,14 +183,14 @@
             <textarea id="notes" rows="3" placeholder="عدد الحقائب، عنوان التوصيل، أو أي طلب خاص"></textarea>
           </label>
           <div class="price-box" id="price-box">
-            <div><span>السعر التقديري</span><small id="price-note">اختر تفاصيل الرحلة</small></div>
+            <div><span>سعر السيارة كاملة</span><small id="price-note">اختر تفاصيل الرحلة</small></div>
             <strong id="price-value">—</strong>
           </div>
           <button class="whatsapp-btn" id="submit-booking" type="submit" disabled>
             <span>إرسال الحجز عبر واتساب</span>
             <b>◀</b>
           </button>
-          <p class="form-footnote">لن يتم تأكيد الرحلة إلا بعد التواصل معك عبر واتساب.</p>
+          <p class="form-footnote">السعر لسيارة واحدة في مرحلة واحدة، ويُؤكد الحجز عبر واتساب.</p>
         </form>
       </section>
     </main>

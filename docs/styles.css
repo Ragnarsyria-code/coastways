@@ -212,6 +212,8 @@ button { cursor: pointer; }
 .form-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }
 .form-title small { color: var(--blue); font-weight: 800; }.form-title h3 { margin: 3px 0 0; font-size: 27px; }
 .secure { color: #198754; background: #e9f8f0; border-radius: 100px; padding: 7px 11px; font-size: 11px; font-weight: 800; }
+.direct-trip-note { margin: -8px 0 22px; padding: 11px 14px; border-radius: 12px; background: #eef7fa; color: var(--navy); font-size: 13px; font-weight: 700; line-height: 1.6; }
+dialog .direct-trip-note { margin: 18px 0; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 label { display: grid; gap: 8px; }
 label > span { font-size: 13px; font-weight: 700; color: #405965; }
