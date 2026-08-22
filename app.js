@@ -13,7 +13,7 @@ async function loadCatalog() {
     response = await fetch("./prices.json", { cache: "no-store" });
   }
   const catalog = await response.json();
-  state.prices = catalog.prices;
+  state.prices = catalog.prices.map((price) => ({ ...price, stages: price.stages || 1 }));
   state.whatsapp = catalog.whatsapp;
   populateAirports();
   updateWhatsappLinks();
@@ -30,6 +30,18 @@ function setOptions(select, values, placeholder) {
   select.disabled = values.length === 0;
 }
 
+function stageLabel(stages) {
+  return Number(stages) === 2 ? "مرحلتان — سيارتان" : "مرحلة واحدة — سيارة واحدة";
+}
+
+function setStageOptions(values) {
+  const select = $("#stages");
+  select.innerHTML = `<option value="">اختر عدد المراحل</option>${values
+    .map((value) => `<option value="${value}">${stageLabel(value)}</option>`)
+    .join("")}`;
+  select.disabled = values.length === 0;
+}
+
 function populateAirports() {
   setOptions($("#airport"), unique(state.prices.map((item) => item.airport)), "اختر المطار");
 }
@@ -37,13 +49,26 @@ function populateAirports() {
 function updateDestinations() {
   const prices = state.prices.filter((item) => item.airport === $("#airport").value);
   setOptions($("#destination"), unique(prices.map((item) => item.destination)), "اختر الوجهة أو المعبر");
+  setStageOptions([]);
+  setOptions($("#vehicle"), [], "اختر السيارة");
+  updatePrice();
+}
+
+function updateStages() {
+  const prices = state.prices.filter(
+    (item) => item.airport === $("#airport").value && item.destination === $("#destination").value,
+  );
+  setStageOptions(unique(prices.map((item) => item.stages)).sort());
   setOptions($("#vehicle"), [], "اختر السيارة");
   updatePrice();
 }
 
 function updateVehicles() {
   const prices = state.prices.filter(
-    (item) => item.airport === $("#airport").value && item.destination === $("#destination").value,
+    (item) =>
+      item.airport === $("#airport").value &&
+      item.destination === $("#destination").value &&
+      item.stages === Number($("#stages").value),
   );
   setOptions($("#vehicle"), unique(prices.map((item) => item.vehicle)), "اختر السيارة");
   updatePrice();
@@ -55,6 +80,7 @@ function selectedPrice() {
     (item) =>
       item.airport === $("#airport").value &&
       item.destination === $("#destination").value &&
+      item.stages === Number($("#stages").value) &&
       item.vehicle === $("#vehicle").value &&
       passengers >= item.min_passengers &&
       passengers <= item.max_passengers,
@@ -63,11 +89,12 @@ function selectedPrice() {
 
 function updatePrice() {
   const price = selectedPrice();
-  const complete = $("#airport").value && $("#destination").value && $("#vehicle").value;
+  const complete =
+    $("#airport").value && $("#destination").value && $("#stages").value && $("#vehicle").value;
   if (price) {
     $("#price-value").textContent = `$${Number(price.price).toLocaleString("en-US")}`;
     $("#price-note").textContent =
-      `${price.vehicle} — سيارة واحدة لـ ${price.min_passengers}–${price.max_passengers} ركاب`;
+      `${price.vehicle} — ${stageLabel(price.stages)} — ${price.min_passengers}–${price.max_passengers} ركاب`;
     $("#price-box").classList.add("has-price");
   } else {
     $("#price-value").textContent = complete ? "حسب الطلب" : "—";
@@ -100,10 +127,10 @@ function submitBooking(event) {
     `الوجهة / المعبر: ${$("#destination").value}`,
     `موديل / نوع السيارة: ${$("#vehicle").value}`,
     `عدد الركاب: ${$("#passengers").value}`,
-    "طريقة الرحلة: مرحلة واحدة - نفس السيارة دون تبديل",
+    `طريقة الرحلة: ${stageLabel($("#stages").value)}`,
     `الموعد: ${dateText}`,
     `رقم الرحلة: ${$("#flight").value || "غير مذكور"}`,
-    `سعر السيارة كاملة: ${price ? `$${price.price}` : "حسب الطلب"}`,
+    `سعر الرحلة كاملة: ${price ? `$${price.price}` : "حسب الطلب"}`,
     `ملاحظات: ${$("#notes").value || "لا يوجد"}`,
     "",
     "أرجو تأكيد توفر السيارة والحجز.",
@@ -118,7 +145,8 @@ function setMinimumDate() {
 }
 
 $("#airport").addEventListener("change", updateDestinations);
-$("#destination").addEventListener("change", updateVehicles);
+$("#destination").addEventListener("change", updateStages);
+$("#stages").addEventListener("change", updateVehicles);
 $("#vehicle").addEventListener("change", updatePrice);
 $("#passengers").addEventListener("input", updatePrice);
 $("#booking-form").addEventListener("submit", submitBooking);

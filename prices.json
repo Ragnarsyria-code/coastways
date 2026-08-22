@@ -1,20 +1,22 @@
 {
   "prices": [
-    {"id": 1, "airport": "مطار اللاذقية", "destination": "اللاذقية", "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 25},
-    {"id": 2, "airport": "مطار اللاذقية", "destination": "طرطوس", "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 55},
-    {"id": 3, "airport": "مطار دمشق", "destination": "اللاذقية", "vehicle": "سوناتا", "min_passengers": 1, "max_passengers": 4, "price": 140},
-    {"id": 4, "airport": "مطار دمشق", "destination": "طرطوس", "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 90},
-    {"id": 5, "airport": "مطار دمشق", "destination": "اللاذقية", "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 145},
-    {"id": 6, "airport": "مطار حلب", "destination": "اللاذقية", "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 100},
-    {"id": 7, "airport": "مطار حلب", "destination": "اللاذقية", "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 100},
-    {"id": 8, "airport": "مطار بيروت", "destination": "اللاذقية", "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 140},
-    {"id": 9, "airport": "مطار بيروت", "destination": "طرطوس", "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 110},
-    {"id": 10, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جوسيه", "vehicle": "أوبتيما", "min_passengers": 1, "max_passengers": 4, "price": 200},
-    {"id": 11, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جوسيه", "vehicle": "جيب توسان", "min_passengers": 1, "max_passengers": 4, "price": 200},
-    {"id": 12, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جوسيه", "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 200},
-    {"id": 13, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر المصنع", "vehicle": "أوبتيما", "min_passengers": 1, "max_passengers": 4, "price": 220},
-    {"id": 14, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر المصنع", "vehicle": "جيب توسان", "min_passengers": 1, "max_passengers": 4, "price": 220},
-    {"id": 15, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر المصنع", "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 220}
+    {"id": 1, "airport": "مطار اللاذقية", "destination": "اللاذقية", "stages": 1, "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 25},
+    {"id": 2, "airport": "مطار اللاذقية", "destination": "طرطوس", "stages": 1, "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 55},
+    {"id": 3, "airport": "مطار دمشق", "destination": "اللاذقية", "stages": 1, "vehicle": "سوناتا", "min_passengers": 1, "max_passengers": 4, "price": 140},
+    {"id": 4, "airport": "مطار دمشق", "destination": "طرطوس", "stages": 1, "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 90},
+    {"id": 5, "airport": "مطار دمشق", "destination": "اللاذقية", "stages": 1, "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 145},
+    {"id": 6, "airport": "مطار حلب", "destination": "اللاذقية", "stages": 1, "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 100},
+    {"id": 7, "airport": "مطار حلب", "destination": "اللاذقية", "stages": 1, "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 100},
+    {"id": 8, "airport": "مطار بيروت", "destination": "اللاذقية", "stages": 1, "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 140},
+    {"id": 9, "airport": "مطار بيروت", "destination": "طرطوس", "stages": 1, "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 110},
+    {"id": 10, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جوسيه", "stages": 1, "vehicle": "أوبتيما", "min_passengers": 1, "max_passengers": 4, "price": 200},
+    {"id": 11, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جوسيه", "stages": 1, "vehicle": "جيب توسان", "min_passengers": 1, "max_passengers": 4, "price": 200},
+    {"id": 12, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جوسيه", "stages": 1, "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 200},
+    {"id": 13, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر المصنع", "stages": 1, "vehicle": "أوبتيما", "min_passengers": 1, "max_passengers": 4, "price": 220},
+    {"id": 14, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر المصنع", "stages": 1, "vehicle": "جيب توسان", "min_passengers": 1, "max_passengers": 4, "price": 220},
+    {"id": 15, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر المصنع", "stages": 1, "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 220},
+    {"id": 16, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جسر قمار", "stages": 2, "vehicle": "فان", "min_passengers": 5, "max_passengers": 8, "price": 190},
+    {"id": 17, "airport": "مطار بيروت", "destination": "اللاذقية عبر معبر جسر قمار", "stages": 2, "vehicle": "تكسي", "min_passengers": 1, "max_passengers": 4, "price": 170}
   ],
   "whatsapp": "963999597094"
 }

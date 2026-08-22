@@ -52,7 +52,7 @@ async function loadCatalog() {
   const file = await githubRequest();
   const catalog = decodeContent(file.content);
   state.sha = file.sha;
-  state.prices = catalog.prices;
+  state.prices = catalog.prices.map((price) => ({ ...price, stages: price.stages || 1 }));
   state.whatsapp = catalog.whatsapp;
   $("#whatsapp-input").value = catalog.whatsapp;
   $("#whatsapp-display").textContent = `+${catalog.whatsapp}`;
@@ -91,6 +91,7 @@ function renderPrices() {
         <tr>
           <td><b>${item.airport}</b></td>
           <td>${item.destination}</td>
+          <td>${item.stages === 2 ? "مرحلتان" : "مرحلة واحدة"}</td>
           <td><span class="vehicle-pill">${item.vehicle}</span></td>
           <td>${item.min_passengers} – ${item.max_passengers}</td>
           <td><strong class="table-price">$${Number(item.price).toLocaleString("en-US")}</strong></td>
@@ -109,6 +110,7 @@ function openDialog(item = null) {
   $("#dialog-mode").textContent = item ? "تعديل السعر" : "سعر جديد";
   $("#edit-airport").value = item?.airport || "";
   $("#edit-destination").value = item?.destination || "";
+  $("#edit-stages").value = item?.stages || 1;
   $("#edit-vehicle").value = item?.vehicle || "";
   $("#edit-price").value = item?.price || "";
   $("#edit-min").value = item?.min_passengers || 1;
@@ -123,6 +125,7 @@ async function savePrice(event) {
     id: id || Math.max(0, ...state.prices.map((price) => price.id)) + 1,
     airport: $("#edit-airport").value.trim(),
     destination: $("#edit-destination").value.trim(),
+    stages: Number($("#edit-stages").value),
     vehicle: $("#edit-vehicle").value.trim(),
     price: Number($("#edit-price").value),
     min_passengers: Number($("#edit-min").value),
