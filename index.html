@@ -3,15 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="انتهت الفترة التجريبية لموقع دروب الساحل للسفر، والموقع متوقف عن الخدمة حالياً." />
+    <meta name="description" content="دروب الساحل للسفر — نقل مطارات خاص بسيارات وفانات حديثة من وإلى مطارات اللاذقية ودمشق وحلب وبيروت." />
     <meta name="theme-color" content="#061b29" />
-    <title>الموقع متوقف | دروب الساحل للسفر</title>
+    <title>دروب الساحل للسفر | نقل مطارات خاص</title>
+    <script>
+      (() => {
+        const trialEnd = Date.parse("2026-09-23T00:00:00+03:00");
+        const expired = Date.now() >= trialEnd;
+        window.COASTWAYS_TRIAL_END = trialEnd;
+        window.COASTWAYS_TRIAL_EXPIRED = expired;
+        if (expired) {
+          document.documentElement.classList.add("trial-expired");
+          document.title = "الموقع متوقف | دروب الساحل للسفر";
+          document.querySelector('meta[name="description"]').content =
+            "انتهت الفترة التجريبية لموقع دروب الساحل للسفر، والموقع متوقف عن الخدمة حالياً.";
+        }
+      })();
+    </script>
+    <link rel="preload" as="image" href="./assets/hero-road.webp" />
+    <link rel="preload" as="image" href="./assets/hero-car.webp" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./styles.css?v=20260823-5" />
+    <link rel="stylesheet" href="./styles.css?v=20260824-1" />
   </head>
-  <body class="site-suspended">
+  <body>
     <div class="suspension-screen" role="main">
       <div class="suspension-orbit orbit-one"></div>
       <div class="suspension-orbit orbit-two"></div>
@@ -29,7 +45,7 @@
         <small>COAST WAYS FOR TRAVEL</small>
       </section>
     </div>
-    <div class="topbar" hidden inert aria-hidden="true">
+    <div class="topbar">
       <div class="topbar-inner">
         <span><i></i> خدمة نقل مطارات على مدار الساعة</span>
         <div>
@@ -44,7 +60,7 @@
       </div>
     </div>
 
-    <div class="hero-shell" id="home" hidden inert aria-hidden="true">
+    <div class="hero-shell" id="home">
       <div class="hero-scene" aria-hidden="true">
         <div class="hero-road"></div>
         <div class="scene-glow"></div>
@@ -95,7 +111,7 @@
       </section>
     </div>
 
-    <main hidden inert aria-hidden="true">
+    <main>
       <section class="confidence-bar" aria-label="مزايا الخدمة">
         <article>
           <span class="mini-icon">
@@ -295,7 +311,7 @@
       </section>
     </main>
 
-    <footer hidden inert aria-hidden="true">
+    <footer>
       <div class="footer-main">
         <div class="footer-brand">
           <img src="./assets/logo.jpg" alt="دروب الساحل للسفر" />
@@ -307,7 +323,29 @@
       <div class="footer-bottom"><small>© 2026 دروب الساحل للسفر — جميع الحقوق محفوظة</small><span>COAST WAYS FOR TRAVEL</span></div>
     </footer>
 
-    <a class="whatsapp-float" data-whatsapp-link data-whatsapp-index="0" href="#" target="_blank" aria-label="تواصل عبر رقم واتساب الأول" hidden inert aria-hidden="true"><span>◉</span><b>واتساب 1</b></a>
-    <a class="whatsapp-float secondary-whatsapp" data-whatsapp-link data-whatsapp-index="1" href="#" target="_blank" aria-label="تواصل عبر رقم واتساب الثاني" hidden inert aria-hidden="true"><span>◉</span><b>واتساب 2</b></a>
+    <a class="whatsapp-float" data-whatsapp-link data-whatsapp-index="0" href="#" target="_blank" aria-label="تواصل عبر رقم واتساب الأول"><span>◉</span><b>واتساب 1</b></a>
+    <a class="whatsapp-float secondary-whatsapp" data-whatsapp-link data-whatsapp-index="1" href="#" target="_blank" aria-label="تواصل عبر رقم واتساب الثاني"><span>◉</span><b>واتساب 2</b></a>
+    <script>
+      (() => {
+        if (window.COASTWAYS_TRIAL_EXPIRED) return;
+
+        ["./app.js?v=20260823-4", "./motion.js?v=20260823-2"].forEach((src) => {
+          const script = document.createElement("script");
+          script.src = src;
+          script.async = false;
+          document.body.appendChild(script);
+        });
+
+        const scheduleExpiry = () => {
+          const remaining = window.COASTWAYS_TRIAL_END - Date.now();
+          if (remaining <= 0) {
+            window.location.reload();
+            return;
+          }
+          window.setTimeout(scheduleExpiry, Math.min(remaining, 2147483647));
+        };
+        scheduleExpiry();
+      })();
+    </script>
   </body>
 </html>
