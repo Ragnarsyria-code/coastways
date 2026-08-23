@@ -33,6 +33,168 @@ button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 svg { width: 100%; height: 100%; fill: currentColor; }
 
+.site-suspended {
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  overflow: hidden;
+  background: #04131d;
+}
+.site-suspended > :not(.suspension-screen) { display: none !important; }
+.suspension-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 28px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(205, 164, 84, 0.18), transparent 30%),
+    radial-gradient(circle at 85% 80%, rgba(16, 97, 126, 0.24), transparent 35%),
+    linear-gradient(145deg, #031019, #072536);
+}
+.suspension-screen::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  opacity: 0.12;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
+}
+.suspension-orbit {
+  width: 440px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(229, 196, 123, 0.18);
+  border-radius: 50%;
+  position: absolute;
+  z-index: -1;
+  animation: suspension-orbit 18s linear infinite;
+}
+.orbit-one { top: -250px; right: -140px; }
+.orbit-two {
+  bottom: -300px;
+  left: -170px;
+  width: 560px;
+  animation-direction: reverse;
+  animation-duration: 24s;
+}
+.suspension-orbit::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  position: absolute;
+  top: 48px;
+  right: 63px;
+  background: var(--gold-light);
+  box-shadow: 0 0 24px var(--gold-light);
+}
+.suspension-card {
+  width: min(100%, 610px);
+  padding: 52px 48px 42px;
+  border: 1px solid rgba(229, 196, 123, 0.24);
+  border-radius: 26px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  background: rgba(5, 28, 42, 0.86);
+  box-shadow: 0 35px 100px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(18px);
+}
+.suspension-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.suspension-card > img {
+  width: 190px;
+  height: 76px;
+  margin-bottom: 22px;
+  border-radius: 9px;
+  object-fit: cover;
+}
+.suspension-status {
+  width: max-content;
+  margin: 0 auto 28px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #b9cbd3;
+  font-size: 12px;
+}
+.suspension-status i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e15d5d;
+  box-shadow: 0 0 0 6px rgba(225, 93, 93, 0.12);
+}
+.suspension-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 24px;
+  border: 1px solid rgba(229, 196, 123, 0.38);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--gold-light);
+  background: rgba(229, 196, 123, 0.08);
+  font-family: serif;
+  font-size: 38px;
+}
+.suspension-kicker {
+  margin: 0 0 8px;
+  color: var(--gold-light);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.suspension-card h1 {
+  margin: 0 0 18px;
+  font-size: clamp(34px, 6vw, 54px);
+  line-height: 1.15;
+}
+.suspension-message {
+  max-width: 470px;
+  margin: 0 auto 28px;
+  color: #b8c9d0;
+  font-size: 16px;
+  line-height: 1.9;
+}
+.suspension-note {
+  padding: 18px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  display: grid;
+  gap: 5px;
+  color: #8da5af;
+  background: rgba(0, 0, 0, 0.15);
+  font-size: 12px;
+}
+.suspension-note b { color: #fff; font-size: 14px; }
+.suspension-card > small {
+  margin-top: 28px;
+  display: block;
+  color: #617b87;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+}
+@keyframes suspension-orbit {
+  to { transform: rotate(360deg); }
+}
+
 .topbar {
   color: #b8c8cf;
   background: var(--navy-950);
@@ -1043,6 +1205,10 @@ dialog .direct-trip-note { margin: 19px 0 0; }
 }
 
 @media (max-width: 700px) {
+  .suspension-screen { padding: 18px; }
+  .suspension-card { padding: 38px 22px 32px; border-radius: 20px; }
+  .suspension-card > img { width: 165px; height: 66px; }
+  .suspension-message { font-size: 14px; }
   .topbar-inner { padding: 0 16px; }
   .topbar-inner div b, .topbar-inner > span { display: none; }
   .topbar-inner { justify-content: center; }
