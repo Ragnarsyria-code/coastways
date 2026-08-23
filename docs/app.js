@@ -1,4 +1,5 @@
-const state = { prices: [], whatsapp: "963999597094" };
+const DEFAULT_WHATSAPP_NUMBERS = ["963936900205", "963930475775"];
+const state = { prices: [], whatsappNumbers: [...DEFAULT_WHATSAPP_NUMBERS] };
 const CATALOG_URL =
   "https://raw.githubusercontent.com/Ragnarsyria-code/coastways/site-data/docs/prices.json";
 const CUSTOM_DESTINATION = "وجهة / معبر آخر — اكتبها يدوياً";
@@ -43,13 +44,30 @@ async function loadCatalog() {
   if (!catalogs.length) throw new Error("Catalog unavailable");
   const catalog = catalogs.sort((a, b) => (b.updated_at || 0) - (a.updated_at || 0))[0];
   state.prices = catalog.prices.map((price) => ({ ...price, stages: price.stages || 1 }));
-  state.whatsapp = catalog.whatsapp;
+  state.whatsappNumbers = unique(
+    (catalog.whatsapp_numbers?.length ? catalog.whatsapp_numbers : [catalog.whatsapp])
+      .map(normalizeWhatsapp)
+      .filter(Boolean),
+  );
+  if (!state.whatsappNumbers.length) state.whatsappNumbers = [...DEFAULT_WHATSAPP_NUMBERS];
   populateAirports();
   updateWhatsappLinks();
 }
 
 function unique(values) {
   return [...new Set(values)];
+}
+
+function normalizeWhatsapp(value) {
+  const digits = String(value || "").replace(/\D/g, "");
+  return digits.startsWith("0") ? `963${digits.slice(1)}` : digits;
+}
+
+function formatWhatsapp(value) {
+  const digits = normalizeWhatsapp(value);
+  return digits.startsWith("963") && digits.length === 12
+    ? `0${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9)}`
+    : `+${digits}`;
 }
 
 function setOptions(select, values, placeholder) {
@@ -160,17 +178,18 @@ function updatePrice() {
 }
 
 function updateWhatsappLinks() {
-  const digits = String(state.whatsapp).replace(/\D/g, "");
-  const displayNumber =
-    digits.startsWith("963") && digits.length === 12
-      ? `+963 ${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9)}`
-      : `+${digits}`;
   $$("[data-whatsapp-link]").forEach((link) => {
-    link.href = `https://wa.me/${state.whatsapp}?text=${encodeURIComponent("مرحباً دروب الساحل، أريد الاستفسار عن رحلة.")}`;
+    const index = Number(link.dataset.whatsappIndex || 0);
+    const number = state.whatsappNumbers[index] || state.whatsappNumbers[0];
+    link.href = `https://wa.me/${number}?text=${encodeURIComponent("مرحباً دروب الساحل، أريد الاستفسار عن رحلة.")}`;
   });
   $$("[data-whatsapp-number]").forEach((number) => {
-    number.textContent = displayNumber;
+    const index = Number(number.dataset.whatsappIndex || 0);
+    number.textContent = formatWhatsapp(state.whatsappNumbers[index] || state.whatsappNumbers[0]);
   });
+  $("#booking-whatsapp").innerHTML = state.whatsappNumbers
+    .map((number, index) => `<option value="${number}">رقم واتساب ${index + 1} — ${formatWhatsapp(number)}</option>`)
+    .join("");
 }
 
 function submitBooking(event) {
@@ -198,7 +217,8 @@ function submitBooking(event) {
     "",
     "أرجو تأكيد توفر السيارة والحجز.",
   ];
-  window.open(`https://wa.me/${state.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank");
+  const whatsapp = $("#booking-whatsapp").value || state.whatsappNumbers[0];
+  window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank");
 }
 
 function setMinimumDate() {

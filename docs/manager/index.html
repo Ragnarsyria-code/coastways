@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="../styles.css?v=20260823-3" />
   </head>
   <body class="admin-body">
     <section class="login-shell" id="login-view">
@@ -41,7 +41,7 @@
         <section class="stats-row">
           <article><small>عدد الأسعار</small><strong id="prices-count">0</strong></article>
           <article><small>المطارات</small><strong id="airports-count">0</strong></article>
-          <article><small>رقم واتساب</small><strong id="whatsapp-display">—</strong></article>
+          <article><small>أرقام واتساب</small><strong id="whatsapp-display">—</strong></article>
         </section>
         <section class="admin-panel">
           <div class="panel-top">
@@ -56,8 +56,8 @@
           </div>
         </section>
         <section class="admin-panel settings-panel">
-          <div><h2>رقم استقبال الحجوزات</h2><p>اكتب الرقم مع رمز الدولة بدون + أو مسافات.</p></div>
-          <form id="settings-form"><input id="whatsapp-input" inputmode="numeric" required /><button class="dark-btn">حفظ الرقم</button></form>
+          <div><h2>رقما استقبال الحجوزات</h2><p>يمكن كتابة الرقم محلياً مثل 0936900205 أو مع رمز الدولة.</p></div>
+          <form id="settings-form"><input id="whatsapp-input-1" inputmode="numeric" aria-label="رقم واتساب الأول" placeholder="رقم واتساب الأول" required /><input id="whatsapp-input-2" inputmode="numeric" aria-label="رقم واتساب الثاني" placeholder="رقم واتساب الثاني" required /><button class="dark-btn">حفظ الرقمين</button></form>
         </section>
       </main>
     </div>
@@ -90,6 +90,6 @@
     </datalist>
     <datalist id="vehicles-list"><option value="سوناتا"></option><option value="تكسي"></option><option value="أوبتيما"></option><option value="جيب توسان"></option><option value="فان"></option></datalist>
     <div class="toast" id="toast"></div>
-    <script src="./admin.js"></script>
+    <script src="./admin.js?v=20260823-3"></script>
   </body>
 </html>

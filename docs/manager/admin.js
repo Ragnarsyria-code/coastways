@@ -1,8 +1,27 @@
 const REPOSITORY = "Ragnarsyria-code/coastways";
 const FILE_PATH = "docs/prices.json";
 const DATA_BRANCH = "site-data";
-const state = { prices: [], whatsapp: "", updatedAt: 0, sha: "", token: "" };
+const DEFAULT_WHATSAPP_NUMBERS = ["963936900205", "963930475775"];
+const state = {
+  prices: [],
+  whatsappNumbers: [...DEFAULT_WHATSAPP_NUMBERS],
+  updatedAt: 0,
+  sha: "",
+  token: "",
+};
 const $ = (selector) => document.querySelector(selector);
+
+function normalizeWhatsapp(value) {
+  const digits = String(value || "").replace(/\D/g, "");
+  return digits.startsWith("0") ? `963${digits.slice(1)}` : digits;
+}
+
+function formatWhatsapp(value) {
+  const digits = normalizeWhatsapp(value);
+  return digits.startsWith("963") && digits.length === 12
+    ? `0${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9)}`
+    : `+${digits}`;
+}
 
 function decodeContent(content) {
   const bytes = Uint8Array.from(atob(content.replace(/\n/g, "")), (character) =>
@@ -53,10 +72,18 @@ async function loadCatalog() {
   const catalog = decodeContent(file.content);
   state.sha = file.sha;
   state.prices = catalog.prices.map((price) => ({ ...price, stages: price.stages || 1 }));
-  state.whatsapp = catalog.whatsapp;
+  state.whatsappNumbers = [
+    ...new Set(
+      (catalog.whatsapp_numbers?.length ? catalog.whatsapp_numbers : [catalog.whatsapp])
+        .map(normalizeWhatsapp)
+        .filter(Boolean),
+    ),
+  ];
+  if (!state.whatsappNumbers.length) state.whatsappNumbers = [...DEFAULT_WHATSAPP_NUMBERS];
   state.updatedAt = catalog.updated_at || 0;
-  $("#whatsapp-input").value = catalog.whatsapp;
-  $("#whatsapp-display").textContent = `+${catalog.whatsapp}`;
+  $("#whatsapp-input-1").value = state.whatsappNumbers[0] || "";
+  $("#whatsapp-input-2").value = state.whatsappNumbers[1] || "";
+  $("#whatsapp-display").textContent = state.whatsappNumbers.map(formatWhatsapp).join(" / ");
   $("#prices-count").textContent = catalog.prices.length;
   $("#airports-count").textContent = new Set(catalog.prices.map((price) => price.airport)).size;
   renderPrices();
@@ -66,7 +93,8 @@ async function publishCatalog(message) {
   const updatedAt = Date.now();
   const content = encodeContent({
     prices: state.prices,
-    whatsapp: state.whatsapp,
+    whatsapp: state.whatsappNumbers[0],
+    whatsapp_numbers: state.whatsappNumbers,
     updated_at: updatedAt,
   });
   const result = await githubRequest({
@@ -203,13 +231,25 @@ $("#prices-table").addEventListener("click", async (event) => {
 
 $("#settings-form").addEventListener("submit", async (event) => {
   event.preventDefault();
-  const oldWhatsapp = state.whatsapp;
-  state.whatsapp = $("#whatsapp-input").value.trim();
+  const oldWhatsappNumbers = [...state.whatsappNumbers];
+  const whatsappNumbers = [
+    normalizeWhatsapp($("#whatsapp-input-1").value),
+    normalizeWhatsapp($("#whatsapp-input-2").value),
+  ];
+  if (whatsappNumbers.some((number) => !number.startsWith("963") || number.length !== 12)) {
+    toast("أدخل رقمين سوريين صحيحين، مثال: 0936900205", true);
+    return;
+  }
+  if (new Set(whatsappNumbers).size !== whatsappNumbers.length) {
+    toast("يجب أن يكون رقما واتساب مختلفين", true);
+    return;
+  }
+  state.whatsappNumbers = whatsappNumbers;
   try {
-    await publishCatalog("تحديث رقم واتساب");
+    await publishCatalog("تحديث أرقام واتساب");
     await loadCatalog();
   } catch (error) {
-    state.whatsapp = oldWhatsapp;
+    state.whatsappNumbers = oldWhatsappNumbers;
     toast(error.message, true);
   }
 });
