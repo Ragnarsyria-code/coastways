@@ -188,7 +188,7 @@ function updateWhatsappLinks() {
     number.textContent = formatWhatsapp(state.whatsappNumbers[index] || state.whatsappNumbers[0]);
   });
   $("#booking-whatsapp").innerHTML = state.whatsappNumbers
-    .map((number, index) => `<option value="${number}">رقم واتساب ${index + 1} — ${formatWhatsapp(number)}</option>`)
+    .map((number, index) => `<option value="${number}">${formatWhatsapp(number)} — ${index + 1}</option>`)
     .join("");
 }
 
