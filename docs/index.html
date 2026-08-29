@@ -2,207 +2,1069 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="دروب الساحل للسفر — تكاسي وفانات من وإلى مطارات اللاذقية ودمشق وحلب وبيروت." />
-    <title>دروب الساحل للسفر | Coast Ways</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#071927" />
+    <meta
+      name="description"
+      content="دروب الساحل للسفر لخدمات النقل الخاص من وإلى مطارات اللاذقية ودمشق وحلب وبيروت، مع حجز سريع وتسعير واضح عبر واتساب."
+    />
+    <meta
+      name="keywords"
+      content="نقل مطارات, تكسي مطار دمشق, تكسي مطار بيروت, دروب الساحل للسفر, سائق خاص, فان مطار"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ar_SY" />
+    <meta property="og:title" content="دروب الساحل للسفر | نقل مطارات خاص" />
+    <meta
+      property="og:description"
+      content="احجز تنقّلك الخاص من المطار إلى وجهتك بخطوات واضحة ودعم مباشر عبر واتساب."
+    />
+    <meta property="og:url" content="https://coastways.surge.sh/" />
+    <meta
+      property="og:image"
+      content="https://coastways.surge.sh/assets/hero-fleet.webp"
+    />
+    <title>دروب الساحل للسفر | نقل خاص من وإلى المطار</title>
+    <link rel="icon" href="./assets/logo-mark.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./assets/hero-fleet.webp"
+      fetchpriority="high"
+    />
+    <link rel="stylesheet" href="./site.css?v=20260829-1" />
+    <script>
+      (() => {
+        const trialEnd = Date.parse("2026-09-23T00:00:00+03:00");
+        const expired = Date.now() >= trialEnd;
+        window.COASTWAYS_TRIAL_END = trialEnd;
+        window.COASTWAYS_TRIAL_EXPIRED = expired;
+        if (expired) {
+          document.documentElement.classList.add("trial-expired");
+          document.title = "الموقع متوقف | دروب الساحل للسفر";
+          document.querySelector('meta[name="description"]').content =
+            "انتهت الفترة التجريبية لموقع دروب الساحل للسفر، والموقع متوقف عن الخدمة حالياً.";
+        }
+      })();
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TaxiService",
+        "name": "دروب الساحل للسفر",
+        "alternateName": "Coast Ways For Travel",
+        "url": "https://coastways.surge.sh/",
+        "image": "https://coastways.surge.sh/assets/hero-fleet.webp",
+        "telephone": ["+963936900205", "+963930475775"],
+        "areaServed": ["اللاذقية", "دمشق", "حلب", "بيروت"],
+        "serviceType": [
+          "Airport transfer",
+          "Private transportation",
+          "Chauffeur service"
+        ]
+      }
+    </script>
   </head>
   <body>
-    <div class="noise"></div>
-    <header class="navbar">
-      <a class="brand" href="#home" aria-label="دروب الساحل">
-        <img src="./assets/logo.jpg" alt="شعار دروب الساحل للسفر" />
-      </a>
-      <nav>
-        <a href="#services">خدماتنا</a>
-        <a href="#airports">المطارات</a>
-        <a href="#booking">احجز الآن</a>
+    <section class="suspension-screen" aria-labelledby="suspension-title">
+      <div class="suspension-card">
+        <img src="./assets/logo-mark.svg" alt="" width="72" height="72" />
+        <p class="eyebrow">COAST WAYS FOR TRAVEL</p>
+        <h1 id="suspension-title">انتهت الفترة التجريبية للموقع</h1>
+        <p>
+          الموقع متوقف عن الخدمة بالكامل حالياً. يرجى التواصل مع إدارة دروب
+          الساحل للسفر.
+        </p>
+        <div class="suspension-status"><span></span> الخدمة غير متاحة</div>
+      </div>
+    </section>
+
+    <a class="skip-link" href="#booking">انتقل إلى الحجز</a>
+
+    <header
+      class="site-header"
+      id="site-header"
+      aria-label="رأس موقع دروب الساحل"
+    >
+      <div class="container header-inner">
+        <a
+          class="brand brand--dark"
+          href="#home"
+          aria-label="دروب الساحل للسفر — الرئيسية"
+        >
+          <img src="./assets/logo-mark.svg" alt="" width="48" height="48" />
+          <span class="brand-copy">
+            <strong>دروب الساحل للسفر</strong>
+            <small dir="ltr">COAST WAYS FOR TRAVEL</small>
+          </span>
+        </a>
+
+        <nav class="desktop-nav" aria-label="التنقل الرئيسي">
+          <a href="#home">الرئيسية</a>
+          <a href="#services">خدماتنا</a>
+          <a href="#fleet">الأسطول</a>
+          <a href="#airports">المطارات</a>
+          <a href="#about">من نحن</a>
+          <a href="#contact">تواصل معنا</a>
+        </nav>
+
+        <div class="header-actions">
+          <a
+            class="header-contact"
+            data-whatsapp-link
+            data-whatsapp-index="0"
+            href="#"
+          >
+            <span>واتساب</span>
+            <bdi dir="ltr" data-whatsapp-number data-whatsapp-index="0"
+              >0936 900 205</bdi
+            >
+          </a>
+          <a class="button button--gold button--sm" href="#booking"
+            >احجز رحلتك</a
+          >
+        </div>
+
+        <button
+          class="menu-toggle"
+          id="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          aria-label="فتح القائمة"
+        >
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <nav
+        class="mobile-nav"
+        id="mobile-nav"
+        aria-label="التنقل على الهاتف"
+        hidden
+      >
+        <div class="container">
+          <a href="#home">الرئيسية</a>
+          <a href="#booking">احجز رحلتك</a>
+          <a href="#services">خدماتنا</a>
+          <a href="#fleet">الأسطول</a>
+          <a href="#airports">المطارات</a>
+          <a href="#about">من نحن</a>
+          <a href="#contact">تواصل معنا</a>
+          <div class="mobile-nav-contact">
+            <a data-whatsapp-link data-whatsapp-index="0" href="#">واتساب 1</a>
+            <a data-whatsapp-link data-whatsapp-index="1" href="#">واتساب 2</a>
+          </div>
+        </div>
       </nav>
-      <a class="nav-cta" href="#booking">احجز رحلتك</a>
     </header>
 
     <main>
       <section class="hero" id="home">
-        <div class="hero-glow glow-one"></div>
-        <div class="hero-glow glow-two"></div>
-        <div class="hero-copy">
-          <span class="eyebrow"><i></i> معك من باب المطار إلى وجهتك</span>
-          <h1>سفرٌ مريح.<br /><strong>طريقٌ مضمون.</strong></h1>
-          <p>
-            تكاسي وفانات حديثة لنقلك بأمان من وإلى مطارات سوريا وبيروت،
-            بخدمة موثوقة على مدار الساعة.
-          </p>
-          <div class="hero-actions">
-            <a class="primary-btn" href="#booking">
-              احجز سيارتك الآن
-              <span>←</span>
-            </a>
-            <a class="ghost-btn" data-whatsapp-link href="#" target="_blank">تواصل عبر واتساب</a>
-          </div>
-          <div class="trust-row">
-            <div><b>24/7</b><span>خدمة مستمرة</span></div>
-            <div><b>4</b><span>مطارات رئيسية</span></div>
-            <div><b>100%</b><span>راحة وأمان</span></div>
-          </div>
+        <div class="hero-media" aria-hidden="true">
+          <img
+            src="./assets/hero-fleet.webp"
+            alt=""
+            width="1536"
+            height="1024"
+            fetchpriority="high"
+          />
         </div>
-        <div class="hero-visual" aria-hidden="true">
-          <div class="orbit orbit-one"></div>
-          <div class="orbit orbit-two"></div>
-          <div class="road-card">
-            <div class="location-pin pin-airport"><span></span></div>
-            <div class="route-line"></div>
-            <div class="location-pin pin-destination"><span></span></div>
-            <div class="car">
-              <div class="car-top"></div>
-              <div class="car-body"></div>
-              <div class="wheel wheel-one"></div>
-              <div class="wheel wheel-two"></div>
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">نقل مطارات خاص · على مدار الساعة</p>
+            <h1>تنقّل خاص<br /><span>يليق برحلتك</span></h1>
+            <p class="hero-lead">
+              من المطار إلى وجهتك براحة، أمان وموعد محسوب.
+            </p>
+            <div class="hero-actions">
+              <a class="button button--gold" href="#booking">
+                احجز رحلتك
+                <span aria-hidden="true">←</span>
+              </a>
+              <a
+                class="button button--glass"
+                data-whatsapp-link
+                data-whatsapp-index="0"
+                href="#"
+              >
+                تواصل عبر واتساب
+              </a>
             </div>
-            <div class="city city-one"></div>
-            <div class="city city-two"></div>
+            <ul class="trust-strip">
+              <li><span>24/7</span> خدمة مستمرة</li>
+              <li><span>✦</span> سائقون محترفون</li>
+              <li><span>✈</span> استقبال من المطار</li>
+              <li><span>$</span> أسعار واضحة</li>
+            </ul>
           </div>
-          <div class="floating-card card-available">
-            <span class="status-dot"></span>
-            <div><b>سيارتك جاهزة</b><small>وصول في الموعد</small></div>
+
+          <aside class="hero-quick-book" aria-label="ابدأ حجزك">
+            <p class="eyebrow">ابدأ خلال دقيقة</p>
+            <h2>إلى أين ستكون رحلتك؟</h2>
+            <button
+              class="quick-route-field"
+              type="button"
+              data-open-location="origin"
+            >
+              <span class="field-icon" aria-hidden="true">✈</span>
+              <span
+                ><small>من أين؟</small
+                ><strong data-location-label="origin"
+                  >اختر نقطة الانطلاق</strong
+                ></span
+              >
+              <span aria-hidden="true">⌄</span>
+            </button>
+            <button
+              class="quick-route-field"
+              type="button"
+              data-open-location="destination"
+            >
+              <span class="field-icon" aria-hidden="true">⌖</span>
+              <span
+                ><small>إلى أين؟</small
+                ><strong data-location-label="destination"
+                  >اختر وجهتك</strong
+                ></span
+              >
+              <span aria-hidden="true">⌄</span>
+            </button>
+            <a
+              class="button button--gold button--full"
+              href="#booking"
+              id="hero-book-button"
+              >عرض الخيارات والأسعار</a
+            >
+            <p class="quick-note">لا يحتاج الحجز إلى إنشاء حساب.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section
+        class="booking-section section"
+        id="booking"
+        aria-labelledby="booking-title"
+      >
+        <div class="container">
+          <div class="booking-heading">
+            <div>
+              <p class="eyebrow eyebrow--dark">حجز مباشر وبسيط</p>
+              <h2 id="booking-title">رحلتك، خطوة بخطوة</h2>
+            </div>
+            <p>
+              اختر مسارك وسيارتك، راجع السعر ثم أرسل الطلب جاهزاً عبر واتساب.
+            </p>
           </div>
-          <div class="floating-card card-rating">
-            <span>★</span>
-            <div><b>خدمة موثوقة</b><small>سائقون محترفون</small></div>
+
+          <div class="booking-shell" data-booking-state="loading">
+            <div class="catalog-status" id="catalog-status" role="status">
+              <span class="spinner" aria-hidden="true"></span>
+              جارٍ تحميل الأسعار المتاحة…
+            </div>
+
+            <nav aria-label="خطوات الحجز">
+              <ol class="booking-progress">
+                <li class="is-active" data-progress-step="0">
+                  <span>1</span><b>المسار</b>
+                </li>
+                <li data-progress-step="1"><span>2</span><b>الموعد</b></li>
+                <li data-progress-step="2"><span>3</span><b>السيارة</b></li>
+                <li data-progress-step="3"><span>4</span><b>البيانات</b></li>
+                <li data-progress-step="4"><span>5</span><b>التأكيد</b></li>
+              </ol>
+            </nav>
+
+            <div class="booking-content">
+              <form id="booking-form" novalidate>
+                <section
+                  class="booking-step is-active"
+                  data-step="0"
+                  aria-labelledby="route-step-title"
+                >
+                  <div class="step-heading">
+                    <span>01</span>
+                    <div>
+                      <h3 id="route-step-title">اختر مسار الرحلة</h3>
+                      <p>حدّد المطار والوجهة لعرض السيارات والأسعار المتاحة.</p>
+                    </div>
+                  </div>
+
+                  <div class="route-selector">
+                    <button
+                      class="location-field"
+                      type="button"
+                      data-open-location="origin"
+                    >
+                      <span class="field-icon" aria-hidden="true">✈</span>
+                      <span
+                        ><small>من أين؟</small
+                        ><strong data-location-label="origin"
+                          >اختر المطار أو المدينة</strong
+                        ></span
+                      >
+                      <span class="field-arrow" aria-hidden="true">⌄</span>
+                    </button>
+                    <button
+                      class="swap-route"
+                      id="swap-route"
+                      type="button"
+                      aria-label="عكس مسار الرحلة"
+                    >
+                      <span aria-hidden="true">⇄</span>
+                    </button>
+                    <button
+                      class="location-field"
+                      type="button"
+                      data-open-location="destination"
+                    >
+                      <span class="field-icon" aria-hidden="true">⌖</span>
+                      <span
+                        ><small>إلى أين؟</small
+                        ><strong data-location-label="destination"
+                          >اختر الوجهة أو المعبر</strong
+                        ></span
+                      >
+                      <span class="field-arrow" aria-hidden="true">⌄</span>
+                    </button>
+                  </div>
+
+                  <div class="route-stage" id="route-stage" hidden>
+                    <fieldset>
+                      <legend>طريقة تنفيذ الرحلة</legend>
+                      <label class="choice-card">
+                        <input type="radio" name="stages" value="1" checked />
+                        <span
+                          ><strong>مرحلة واحدة</strong
+                          ><small>نفس السيارة طوال الرحلة</small></span
+                        >
+                      </label>
+                      <label class="choice-card">
+                        <input type="radio" name="stages" value="2" />
+                        <span
+                          ><strong>مرحلتان</strong
+                          ><small>تبديل السيارة عند المعبر</small></span
+                        >
+                      </label>
+                    </fieldset>
+                  </div>
+
+                  <div class="inline-error" id="route-error" role="alert"></div>
+                  <div class="step-actions">
+                    <span></span>
+                    <button
+                      class="button button--navy"
+                      type="button"
+                      data-next-step
+                    >
+                      متابعة إلى الموعد <span aria-hidden="true">←</span>
+                    </button>
+                  </div>
+                </section>
+
+                <section
+                  class="booking-step"
+                  data-step="1"
+                  aria-labelledby="schedule-step-title"
+                  hidden
+                >
+                  <div class="step-heading">
+                    <span>02</span>
+                    <div>
+                      <h3 id="schedule-step-title">متى ستكون الرحلة؟</h3>
+                      <p>أضف الموعد وعدد المسافرين لنقترح الخيارات المناسبة.</p>
+                    </div>
+                  </div>
+
+                  <div class="schedule-grid">
+                    <div class="field-group">
+                      <span class="field-label">تاريخ الرحلة</span>
+                      <div class="date-shortcuts">
+                        <button type="button" data-date-shortcut="today">
+                          اليوم
+                        </button>
+                        <button type="button" data-date-shortcut="tomorrow">
+                          غداً
+                        </button>
+                        <label>
+                          <span>اختيار تاريخ</span>
+                          <input id="trip-date" type="date" required />
+                        </label>
+                      </div>
+                    </div>
+
+                    <label class="premium-input">
+                      <span>وقت الاستقبال</span>
+                      <input id="pickup-time" type="time" required />
+                    </label>
+                  </div>
+
+                  <div class="flight-field" id="flight-field" hidden>
+                    <label class="premium-input">
+                      <span
+                        >رقم الرحلة <bdi dir="ltr">/ Flight Number</bdi></span
+                      >
+                      <input
+                        id="flight-number"
+                        type="text"
+                        dir="ltr"
+                        inputmode="text"
+                        placeholder="EK913"
+                        autocomplete="off"
+                      />
+                    </label>
+                    <p>
+                      يساعدنا رقم الرحلة على متابعة موعد وصولك وتعديل وقت
+                      الاستقبال عند التأخير.
+                    </p>
+                    <span class="flight-status"
+                      >المتابعة التلقائية ستتوفر عند ربط مزود بيانات
+                      الرحلات.</span
+                    >
+                  </div>
+
+                  <div class="counter-grid">
+                    <div class="counter-control">
+                      <div>
+                        <strong>عدد الركاب</strong
+                        ><small>بمن فيهم الأطفال</small>
+                      </div>
+                      <div class="stepper" data-stepper="passengers">
+                        <button
+                          type="button"
+                          data-counter-action="decrease"
+                          aria-label="تقليل عدد الركاب"
+                        >
+                          −
+                        </button>
+                        <output id="passengers-count" aria-live="polite"
+                          >2</output
+                        >
+                        <button
+                          type="button"
+                          data-counter-action="increase"
+                          aria-label="زيادة عدد الركاب"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <div class="counter-control">
+                      <div>
+                        <strong>عدد الحقائب</strong
+                        ><small>الحقائب الكبيرة</small>
+                      </div>
+                      <div class="stepper" data-stepper="luggage">
+                        <button
+                          type="button"
+                          data-counter-action="decrease"
+                          aria-label="تقليل عدد الحقائب"
+                        >
+                          −
+                        </button>
+                        <output id="luggage-count" aria-live="polite">2</output>
+                        <button
+                          type="button"
+                          data-counter-action="increase"
+                          aria-label="زيادة عدد الحقائب"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="inline-error"
+                    id="schedule-error"
+                    role="alert"
+                  ></div>
+                  <div class="step-actions">
+                    <button
+                      class="button button--text"
+                      type="button"
+                      data-prev-step
+                    >
+                      السابق
+                    </button>
+                    <button
+                      class="button button--navy"
+                      type="button"
+                      data-next-step
+                    >
+                      اختيار السيارة <span aria-hidden="true">←</span>
+                    </button>
+                  </div>
+                </section>
+
+                <section
+                  class="booking-step"
+                  data-step="2"
+                  aria-labelledby="vehicle-step-title"
+                  hidden
+                >
+                  <div class="step-heading">
+                    <span>03</span>
+                    <div>
+                      <h3 id="vehicle-step-title">اختر السيارة</h3>
+                      <p>نعرض فقط السيارات المرتبطة بمسارك وعدد الركاب.</p>
+                    </div>
+                  </div>
+                  <div class="vehicle-list" id="vehicle-list"></div>
+                  <div
+                    class="inline-error"
+                    id="vehicle-error"
+                    role="alert"
+                  ></div>
+                  <div class="step-actions">
+                    <button
+                      class="button button--text"
+                      type="button"
+                      data-prev-step
+                    >
+                      السابق
+                    </button>
+                    <button
+                      class="button button--navy"
+                      type="button"
+                      data-next-step
+                    >
+                      بيانات المسافر <span aria-hidden="true">←</span>
+                    </button>
+                  </div>
+                </section>
+
+                <section
+                  class="booking-step"
+                  data-step="3"
+                  aria-labelledby="details-step-title"
+                  hidden
+                >
+                  <div class="step-heading">
+                    <span>04</span>
+                    <div>
+                      <h3 id="details-step-title">بيانات المسافر</h3>
+                      <p>سنستخدم هذه المعلومات لتأكيد الرحلة معك فقط.</p>
+                    </div>
+                  </div>
+
+                  <div class="details-grid">
+                    <label class="premium-input">
+                      <span>الاسم الكامل</span>
+                      <input
+                        id="full-name"
+                        type="text"
+                        autocomplete="name"
+                        required
+                      />
+                      <small
+                        class="field-error"
+                        data-error-for="full-name"
+                      ></small>
+                    </label>
+                    <div class="phone-field">
+                      <span class="field-label">رقم الهاتف</span>
+                      <div>
+                        <button
+                          class="country-code"
+                          type="button"
+                          id="country-code"
+                          aria-haspopup="listbox"
+                          aria-expanded="false"
+                        >
+                          <span>🇸🇾</span><bdi dir="ltr">+963</bdi
+                          ><span aria-hidden="true">⌄</span>
+                        </button>
+                        <input
+                          id="phone"
+                          type="tel"
+                          dir="ltr"
+                          inputmode="tel"
+                          autocomplete="tel"
+                          placeholder="936 900 205"
+                          required
+                        />
+                      </div>
+                      <div
+                        class="country-menu"
+                        id="country-menu"
+                        role="listbox"
+                        hidden
+                      >
+                        <button
+                          type="button"
+                          role="option"
+                          data-code="+963"
+                          data-flag="🇸🇾"
+                        >
+                          🇸🇾 سوريا <bdi dir="ltr">+963</bdi>
+                        </button>
+                        <button
+                          type="button"
+                          role="option"
+                          data-code="+961"
+                          data-flag="🇱🇧"
+                        >
+                          🇱🇧 لبنان <bdi dir="ltr">+961</bdi>
+                        </button>
+                      </div>
+                      <small class="field-error" data-error-for="phone"></small>
+                    </div>
+                    <label class="premium-input">
+                      <span>رقم واتساب</span>
+                      <input
+                        id="passenger-whatsapp"
+                        type="tel"
+                        dir="ltr"
+                        inputmode="tel"
+                        autocomplete="tel"
+                        placeholder="+963 ..."
+                        required
+                      />
+                      <small
+                        class="field-error"
+                        data-error-for="passenger-whatsapp"
+                      ></small>
+                    </label>
+                    <label class="premium-input premium-input--wide">
+                      <span>ملاحظات إضافية <em>اختياري</em></span>
+                      <textarea
+                        id="notes"
+                        rows="3"
+                        placeholder="موقع الاستقبال أو أي تفاصيل تساعد السائق"
+                      ></textarea>
+                    </label>
+                  </div>
+
+                  <fieldset class="recipient-picker">
+                    <legend>إرسال الطلب إلى</legend>
+                    <div id="recipient-options"></div>
+                  </fieldset>
+
+                  <div
+                    class="inline-error"
+                    id="details-error"
+                    role="alert"
+                  ></div>
+                  <div class="step-actions">
+                    <button
+                      class="button button--text"
+                      type="button"
+                      data-prev-step
+                    >
+                      السابق
+                    </button>
+                    <button
+                      class="button button--navy"
+                      type="button"
+                      data-next-step
+                    >
+                      مراجعة الطلب <span aria-hidden="true">←</span>
+                    </button>
+                  </div>
+                </section>
+
+                <section
+                  class="booking-step"
+                  data-step="4"
+                  aria-labelledby="review-step-title"
+                  hidden
+                >
+                  <div class="step-heading">
+                    <span>05</span>
+                    <div>
+                      <h3 id="review-step-title">راجع طلبك</h3>
+                      <p>تأكد من التفاصيل قبل فتح واتساب وإرسال الحجز.</p>
+                    </div>
+                  </div>
+                  <div class="review-layout">
+                    <div class="review-route">
+                      <div>
+                        <span class="route-dot route-dot--airport">✈</span
+                        ><small>من</small><strong id="review-origin">—</strong>
+                      </div>
+                      <span class="route-line"></span>
+                      <div>
+                        <span class="route-dot">⌖</span><small>إلى</small
+                        ><strong id="review-destination">—</strong>
+                      </div>
+                    </div>
+                    <dl class="review-list" id="review-list"></dl>
+                    <div class="review-price">
+                      <span>السعر الإجمالي</span>
+                      <strong id="review-price">السعر بعد مراجعة الطلب</strong>
+                      <small id="review-price-note"
+                        >سيؤكد المكتب السعر والتوفر عبر واتساب.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="step-actions step-actions--review">
+                    <button
+                      class="button button--text"
+                      type="button"
+                      data-prev-step
+                    >
+                      تعديل البيانات
+                    </button>
+                    <button class="button button--whatsapp" type="submit">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L.2 24l6.4-1.7a11.8 11.8 0 0 0 5.6 1.4C18.7 23.7 24 18.4 24 11.9c0-3.2-1.2-6.1-3.5-8.4Zm-8.4 18.2c-1.7 0-3.4-.5-4.9-1.3l-.4-.2-3.8 1 1-3.7-.2-.4a9.7 9.7 0 1 1 8.3 4.6Zm5.3-7.3c-.3-.1-1.7-.8-2-1-.3-.1-.5-.1-.7.2l-.9 1.1c-.2.2-.3.3-.6.1a8 8 0 0 1-2.3-1.4 8.8 8.8 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.5.3-.5c.1-.2.1-.4 0-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.3-.2-.4-.5-.5Z"
+                        />
+                      </svg>
+                      تأكيد وإرسال عبر واتساب
+                    </button>
+                  </div>
+                </section>
+              </form>
+
+              <aside class="booking-summary" aria-label="ملخص الرحلة">
+                <p class="eyebrow eyebrow--dark">ملخص الرحلة</p>
+                <div class="summary-route">
+                  <div>
+                    <small>من</small
+                    ><strong data-summary="origin">لم تحدد بعد</strong>
+                  </div>
+                  <span aria-hidden="true">↓</span>
+                  <div>
+                    <small>إلى</small
+                    ><strong data-summary="destination">لم تحدد بعد</strong>
+                  </div>
+                </div>
+                <dl>
+                  <div>
+                    <dt>التاريخ</dt>
+                    <dd data-summary="date">—</dd>
+                  </div>
+                  <div>
+                    <dt>الوقت</dt>
+                    <dd data-summary="time" dir="ltr">—</dd>
+                  </div>
+                  <div>
+                    <dt>السيارة</dt>
+                    <dd data-summary="vehicle">—</dd>
+                  </div>
+                  <div>
+                    <dt>الركاب</dt>
+                    <dd data-summary="passengers">2</dd>
+                  </div>
+                  <div>
+                    <dt>الحقائب</dt>
+                    <dd data-summary="luggage">2</dd>
+                  </div>
+                </dl>
+                <div class="summary-price">
+                  <span>السعر</span>
+                  <strong data-summary="price">يظهر بعد اختيار السيارة</strong>
+                </div>
+                <p class="summary-assurance">
+                  لن تُرسل أي معلومات قبل مراجعتك النهائية.
+                </p>
+              </aside>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="section" id="services">
-        <div class="section-heading">
-          <span class="eyebrow">خدمات مصممة لراحتك</span>
-          <h2>اختر المركبة التي تناسب رحلتك</h2>
-          <p>من الرحلات الفردية إلى المجموعات والعائلات، نوفر لك الخيار الأنسب.</p>
-        </div>
-        <div class="services-grid">
-          <article class="service-card featured">
-            <div class="service-icon">🚕</div>
-            <div class="capacity">حتى 4 ركاب</div>
-            <h3>تكسي خاص</h3>
-            <p>سيارة مريحة وخصوصية كاملة للرحلات الفردية والعائلية الصغيرة.</p>
-            <a href="#booking">احجز تكسي <span>←</span></a>
-          </article>
-          <article class="service-card">
-            <div class="service-icon">🚐</div>
-            <div class="capacity">حتى 8 ركاب</div>
-            <h3>فان عائلي</h3>
-            <p>مساحة أوسع للحقائب والعائلات والمجموعات مع راحة طوال الطريق.</p>
-            <a href="#booking">احجز فان <span>←</span></a>
-          </article>
-          <article class="service-card">
-            <div class="service-icon">🚌</div>
-            <div class="capacity">مجموعات</div>
-            <h3>رحلات خاصة</h3>
-            <p>تنسيق مرن للمجموعات والوفود والطلبات الخاصة حسب عدد المسافرين.</p>
-            <a data-whatsapp-link href="#" target="_blank">اطلب عرض سعر <span>←</span></a>
-          </article>
+      <section
+        class="section services"
+        id="services"
+        aria-labelledby="services-title"
+      >
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow eyebrow--dark">خدماتنا</p>
+              <h2 id="services-title">نقل خاص لكل نوع من الرحلات</h2>
+            </div>
+            <p>
+              من لحظة الوصول وحتى باب وجهتك، بخدمة مباشرة تناسب الأفراد
+              والعائلات والمجموعات.
+            </p>
+          </div>
+          <div class="service-grid">
+            <article>
+              <span class="service-icon">✈</span>
+              <h3>استقبال من المطار</h3>
+              <p>تنسيق نقطة الاستقبال وفق تفاصيل وصولك.</p>
+              <a href="#booking">احجز الاستقبال ←</a>
+            </article>
+            <article>
+              <span class="service-icon">⌂</span>
+              <h3>توصيل إلى المطار</h3>
+              <p>موعد محسوب للوصول إلى المطار دون استعجال.</p>
+              <a href="#booking">اختر موعدك ←</a>
+            </article>
+            <article>
+              <span class="service-icon">↝</span>
+              <h3>تنقّل بين المدن</h3>
+              <p>رحلات خاصة بين المدن المتاحة في شبكتنا.</p>
+              <a href="#booking">حدد المسار ←</a>
+            </article>
+            <article>
+              <span class="service-icon">◇</span>
+              <h3>خدمة رجال الأعمال</h3>
+              <p>تنقّل خاص بهدوء ومرونة في المواعيد.</p>
+              <a href="#booking">اطلب الخدمة ←</a>
+            </article>
+            <article>
+              <span class="service-icon">◌</span>
+              <h3>رحلات خاصة</h3>
+              <p>تفاصيل رحلة مرنة تُراجع مباشرة مع المكتب.</p>
+              <a href="#booking">أرسل طلبك ←</a>
+            </article>
+            <article>
+              <span class="service-icon">◫</span>
+              <h3>العائلات والمجموعات</h3>
+              <p>خيارات فان مرتبطة بعدد الركاب المتاح.</p>
+              <a href="#booking">شاهد الخيارات ←</a>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section class="airports-section" id="airports">
-        <div class="section-heading light">
-          <span class="eyebrow">نصل إليك أينما كنت</span>
-          <h2>المطارات التي نخدمها</h2>
+      <section
+        class="section fleet-section"
+        id="fleet"
+        aria-labelledby="fleet-title"
+      >
+        <div class="container">
+          <div class="section-heading section-heading--light">
+            <div>
+              <p class="eyebrow">الأسطول</p>
+              <h2 id="fleet-title">اختر الفئة التي تناسب رحلتك</h2>
+            </div>
+            <p>
+              تظهر السعة والسعر الفعليان أثناء الحجز بحسب المسار والبيانات التي
+              يديرها المكتب.
+            </p>
+          </div>
+          <div class="fleet-showcase" id="fleet-showcase"></div>
         </div>
-        <div class="airport-track">
-          <div class="airport-card">
-            <span>LTK</span><h3>مطار اللاذقية</h3><p>سوريا</p>
+      </section>
+
+      <section
+        class="section routes-section"
+        id="airports"
+        aria-labelledby="routes-title"
+      >
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow eyebrow--dark">المطارات والوجهات</p>
+              <h2 id="routes-title">أشهر الرحلات</h2>
+            </div>
+            <p>
+              اضغط على أي مسار لتعبئة الحجز فوراً. لا نعرض إلا أسعاراً موجودة في
+              كتالوج المكتب.
+            </p>
           </div>
-          <div class="airport-card">
-            <span>DAM</span><h3>مطار دمشق</h3><p>سوريا</p>
-          </div>
-          <div class="airport-card">
-            <span>ALP</span><h3>مطار حلب</h3><p>سوريا</p>
-          </div>
-          <div class="airport-card">
-            <span>BEY</span><h3>مطار بيروت</h3><p>لبنان</p>
+          <div class="popular-routes" id="popular-routes"></div>
+          <div class="airport-row" role="list" aria-label="المطارات المدعومة">
+            <span role="listitem">مطار اللاذقية <bdi dir="ltr">LTK</bdi></span>
+            <span role="listitem">مطار دمشق <bdi dir="ltr">DAM</bdi></span>
+            <span role="listitem">مطار حلب <bdi dir="ltr">ALP</bdi></span>
+            <span role="listitem">مطار بيروت <bdi dir="ltr">BEY</bdi></span>
           </div>
         </div>
       </section>
 
-      <section class="booking-section" id="booking">
-        <div class="booking-copy">
-          <span class="eyebrow">خطوات قليلة تفصلك عن رحلتك</span>
-          <h2>احجز استقبالك<br />من المطار الآن</h2>
-          <p>اختر تفاصيل رحلتك، وسيظهر السعر المتاح ثم أرسل الطلب مباشرة عبر واتساب.</p>
-          <ul>
-            <li><span>01</span> اختر المطار والوجهة</li>
-            <li><span>02</span> حدد المركبة وعدد الركاب</li>
-            <li><span>03</span> أرسل الطلب وثبّت الحجز</li>
+      <section class="section trust-section" aria-labelledby="trust-title">
+        <div class="container trust-grid">
+          <div class="trust-copy">
+            <p class="eyebrow eyebrow--dark">لماذا دروب الساحل؟</p>
+            <h2 id="trust-title">خدمة واضحة من أول اختيار حتى تأكيد الرحلة</h2>
+            <p>
+              صُممت تجربة الحجز لتضع تفاصيل المسار والسيارة والسعر أمامك قبل
+              التواصل النهائي.
+            </p>
+            <a class="button button--navy" href="#booking">ابدأ حجزك</a>
+          </div>
+          <ul class="trust-list">
+            <li>
+              <span>01</span>
+              <div>
+                <strong>خدمة على مدار الساعة</strong>
+                <p>إمكانية إرسال طلبات الحجز والاستفسار في أي وقت.</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <strong>تفاصيل رحلة متكاملة</strong>
+                <p>المسار والموعد والركاب والسيارة في رسالة واحدة.</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <strong>أسعار واضحة</strong>
+                <p>يظهر السعر عندما تتوفر تسعيرة مطابقة في الكتالوج.</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <strong>دعم مباشر عبر واتساب</strong>
+                <p>قناة سريعة لتأكيد التوفر وتفاصيل الاستقبال.</p>
+              </div>
+            </li>
           </ul>
         </div>
-        <form class="booking-card" id="booking-form">
-          <div class="form-title">
-            <div><small>حجز جديد</small><h3>تفاصيل الرحلة</h3></div>
-            <span class="secure">حجز آمن</span>
+      </section>
+
+      <section class="about-section" id="about" aria-labelledby="about-title">
+        <div class="about-media">
+          <img
+            src="./assets/hero-road.webp"
+            alt="طريق ساحلي قرب المطار عند الغروب"
+            width="1440"
+            height="960"
+            loading="lazy"
+          />
+        </div>
+        <div class="about-copy">
+          <p class="eyebrow">دروب الساحل للسفر</p>
+          <h2 id="about-title">رحلة خاصة تبدأ قبل ركوب السيارة</h2>
+          <p>
+            نوفر خدمة نقل من وإلى المطارات وبين المدن المتاحة، مع خيارات تكسي
+            وسيدان وسيارات مرتفعة وفانات تُحجز مباشرة عبر واتساب.
+          </p>
+          <div class="about-airports">
+            <span>اللاذقية</span><span>دمشق</span><span>حلب</span
+            ><span>بيروت</span>
           </div>
-          <div class="form-grid">
-            <label>
-              <span>الاسم الكامل</span>
-              <input id="name" required placeholder="اكتب اسم المسافر" autocomplete="name" />
-            </label>
-            <label>
-              <span>رقم الهاتف</span>
-              <input id="phone" required placeholder="+963 ..." inputmode="tel" autocomplete="tel" />
-            </label>
-            <label>
-              <span>مطار الانطلاق / الوصول</span>
-              <select id="airport" required><option value="">اختر المطار</option></select>
-            </label>
-            <label>
-              <span>الوجهة</span>
-              <select id="destination" required disabled><option value="">اختر الوجهة</option></select>
-            </label>
-            <label>
-              <span>نوع المركبة</span>
-              <select id="vehicle" required disabled><option value="">اختر المركبة</option></select>
-            </label>
-            <label>
-              <span>عدد الركاب</span>
-              <input id="passengers" type="number" min="1" max="50" value="1" required />
-            </label>
-            <label>
-              <span>تاريخ ووقت الرحلة</span>
-              <input id="date" type="datetime-local" required />
-            </label>
-            <label>
-              <span>رقم الرحلة الجوية (اختياري)</span>
-              <input id="flight" placeholder="مثال: RB 501" />
-            </label>
-          </div>
-          <label class="full-label">
-            <span>ملاحظات أو عنوان تفصيلي</span>
-            <textarea id="notes" rows="3" placeholder="عدد الحقائب، عنوان التوصيل، أو أي طلب خاص"></textarea>
-          </label>
-          <div class="price-box" id="price-box">
-            <div><span>السعر التقديري</span><small id="price-note">اختر تفاصيل الرحلة</small></div>
-            <strong id="price-value">—</strong>
-          </div>
-          <button class="whatsapp-btn" id="submit-booking" type="submit" disabled>
-            <span>إرسال الحجز عبر واتساب</span>
-            <b>◀</b>
-          </button>
-          <p class="form-footnote">لن يتم تأكيد الرحلة إلا بعد التواصل معك عبر واتساب.</p>
-        </form>
+        </div>
       </section>
     </main>
 
-    <footer>
-      <div class="footer-brand"><img src="./assets/logo.jpg" alt="دروب الساحل" /></div>
-      <p>رحلتك تبدأ براحة، وتنتهي بأمان.</p>
-      <div class="footer-links">
-        <a href="#services">الخدمات</a><a href="#airports">المطارات</a><a href="#booking">الحجز</a>
+    <footer class="site-footer" id="contact">
+      <div class="container footer-grid">
+        <div>
+          <a class="brand brand--light" href="#home">
+            <img
+              src="./assets/logo-mark.svg"
+              alt=""
+              width="52"
+              height="52"
+              loading="lazy"
+            />
+            <span class="brand-copy"
+              ><strong>دروب الساحل للسفر</strong
+              ><small dir="ltr">COAST WAYS FOR TRAVEL</small></span
+            >
+          </a>
+          <p>خدمة نقل خاصة تجمع بين الراحة، الالتزام وسهولة الحجز.</p>
+        </div>
+        <nav aria-label="روابط التذييل">
+          <h2>روابط سريعة</h2>
+          <a href="#services">خدماتنا</a>
+          <a href="#fleet">الأسطول</a>
+          <a href="#airports">المطارات</a>
+          <a href="#booking">احجز الآن</a>
+        </nav>
+        <div>
+          <h2>تواصل معنا</h2>
+          <a data-whatsapp-link data-whatsapp-index="0" href="#"
+            ><bdi dir="ltr" data-whatsapp-number data-whatsapp-index="0"
+              >0936 900 205</bdi
+            >
+            واتساب</a
+          >
+          <a data-whatsapp-link data-whatsapp-index="1" href="#"
+            ><bdi dir="ltr" data-whatsapp-number data-whatsapp-index="1"
+              >0930 475 775</bdi
+            >
+            واتساب</a
+          >
+          <a href="./manager/">دخول المدير</a>
+        </div>
       </div>
-      <small>© 2026 دروب الساحل للسفر — جميع الحقوق محفوظة</small>
+      <div class="container footer-bottom">
+        <span>© 2026 دروب الساحل للسفر</span>
+        <span dir="ltr">COAST WAYS FOR TRAVEL</span>
+      </div>
     </footer>
-    <a class="whatsapp-float" data-whatsapp-link href="#" target="_blank" aria-label="واتساب">☎</a>
-    <script src="./app.js"></script>
+
+    <a
+      class="floating-whatsapp"
+      data-whatsapp-link
+      data-whatsapp-index="0"
+      href="#"
+      aria-label="تواصل معنا عبر واتساب"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L.2 24l6.4-1.7a11.8 11.8 0 0 0 5.6 1.4C18.7 23.7 24 18.4 24 11.9c0-3.2-1.2-6.1-3.5-8.4Zm-8.4 18.2c-1.7 0-3.4-.5-4.9-1.3l-.4-.2-3.8 1 1-3.7-.2-.4a9.7 9.7 0 1 1 8.3 4.6Zm5.3-7.3c-.3-.1-1.7-.8-2-1-.3-.1-.5-.1-.7.2l-.9 1.1c-.2.2-.3.3-.6.1a8 8 0 0 1-2.3-1.4 8.8 8.8 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.5.3-.5c.1-.2.1-.4 0-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.3-.2-.4-.5-.5Z"
+        />
+      </svg>
+      <span>تواصل معنا</span>
+    </a>
+
+    <dialog
+      class="location-dialog"
+      id="location-dialog"
+      aria-labelledby="location-dialog-title"
+    >
+      <div class="dialog-sheet">
+        <div class="dialog-header">
+          <div>
+            <p class="eyebrow eyebrow--dark">اختيار الموقع</p>
+            <h2 id="location-dialog-title">من أين؟</h2>
+          </div>
+          <button type="button" id="close-location-dialog" aria-label="إغلاق">
+            ×
+          </button>
+        </div>
+        <label class="location-search">
+          <span aria-hidden="true">⌕</span>
+          <input
+            id="location-search"
+            type="search"
+            placeholder="ابحث عن مطار، مدينة أو معبر..."
+            autocomplete="off"
+          />
+        </label>
+        <div class="location-results" id="location-results"></div>
+        <div class="location-empty" id="location-empty" hidden>
+          <span>⌖</span>
+          <strong>لم نجد هذه الوجهة</strong>
+          <p>جرّب كتابة اسم المدينة أو المطار بطريقة أخرى</p>
+          <button type="button" id="use-custom-location" hidden>
+            استخدم الاسم كوجهة لطلب السعر
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <script>
+      (() => {
+        if (window.COASTWAYS_TRIAL_EXPIRED) return;
+
+        const script = document.createElement("script");
+        script.type = "module";
+        script.src = "./app.js?v=20260829-1";
+        document.body.appendChild(script);
+
+        const scheduleExpiry = () => {
+          const remaining = window.COASTWAYS_TRIAL_END - Date.now();
+          if (remaining <= 0) {
+            window.location.reload();
+            return;
+          }
+          window.setTimeout(scheduleExpiry, Math.min(remaining, 2147483647));
+        };
+        scheduleExpiry();
+      })();
+    </script>
   </body>
 </html>
