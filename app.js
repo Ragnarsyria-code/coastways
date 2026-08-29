@@ -839,6 +839,15 @@ function initializeHeader() {
   handleScroll();
   window.addEventListener("scroll", handleScroll, { passive: true });
 
+  const heroBooking = $(".hero-quick-book");
+  if (heroBooking && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      ([entry]) => floating.classList.toggle("is-hidden", entry.isIntersecting),
+      { threshold: 0.12 },
+    );
+    observer.observe(heroBooking);
+  }
+
   menuButton.addEventListener("click", () => {
     const expanded = menuButton.getAttribute("aria-expanded") === "true";
     menuButton.setAttribute("aria-expanded", String(!expanded));
