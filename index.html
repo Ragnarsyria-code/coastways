@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#071927" />
     <meta
       name="description"
-      content="دروب الساحل للسفر لخدمات النقل الخاص من وإلى مطارات اللاذقية ودمشق وحلب وبيروت، مع حجز سريع وتسعير واضح عبر واتساب."
+      content="دروب الساحل للسفر لخدمات النقل الخاص من وإلى مطارات اللاذقية ودمشق وحلب وبيروت، مع تسعير واضح وتذكرة حجز مبدئي."
     />
     <meta
       name="keywords"
@@ -20,15 +20,15 @@
     <meta property="og:title" content="دروب الساحل للسفر | نقل مطارات خاص" />
     <meta
       property="og:description"
-      content="احجز تنقّلك الخاص من المطار إلى وجهتك بخطوات واضحة ودعم مباشر عبر واتساب."
+      content="احجز تنقّلك الخاص من المطار إلى وجهتك بخطوات واضحة واحصل على تذكرة HOLD مبدئية."
     />
     <meta property="og:url" content="https://coastways.surge.sh/" />
     <meta
       property="og:image"
-      content="https://coastways.surge.sh/assets/hero-fleet.webp"
+      content="https://coastways.surge.sh/assets/hero-road.webp"
     />
     <title>دروب الساحل للسفر | نقل خاص من وإلى المطار</title>
-    <link rel="icon" href="./assets/logo-mark.svg" type="image/svg+xml" />
+    <link rel="icon" href="./assets/logo-icon.png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -38,10 +38,16 @@
     <link
       rel="preload"
       as="image"
-      href="./assets/hero-fleet.webp"
+      href="./assets/hero-road.webp"
       fetchpriority="high"
     />
-    <link rel="stylesheet" href="./site.css?v=20260829-1" />
+    <link
+      rel="preload"
+      as="image"
+      href="./assets/hero-car.webp"
+      fetchpriority="high"
+    />
+    <link rel="stylesheet" href="./site.css?v=20260906-2" />
     <script>
       (() => {
         const trialEnd = Date.parse("2026-09-23T00:00:00+03:00");
@@ -63,7 +69,7 @@
         "name": "دروب الساحل للسفر",
         "alternateName": "Coast Ways For Travel",
         "url": "https://coastways.surge.sh/",
-        "image": "https://coastways.surge.sh/assets/hero-fleet.webp",
+        "image": "https://coastways.surge.sh/assets/hero-road.webp",
         "telephone": ["+963936900205", "+963930475775"],
         "areaServed": ["اللاذقية", "دمشق", "حلب", "بيروت"],
         "serviceType": [
@@ -77,7 +83,13 @@
   <body>
     <section class="suspension-screen" aria-labelledby="suspension-title">
       <div class="suspension-card">
-        <img src="./assets/logo-mark.svg" alt="" width="72" height="72" />
+        <img
+          class="suspension-logo"
+          src="./assets/logo-original-dark.png"
+          alt="دروب الساحل للسفر — COAST WAYS FOR TRAVEL"
+          width="310"
+          height="82"
+        />
         <p class="eyebrow">COAST WAYS FOR TRAVEL</p>
         <h1 id="suspension-title">انتهت الفترة التجريبية للموقع</h1>
         <p>
@@ -101,11 +113,13 @@
           href="#home"
           aria-label="دروب الساحل للسفر — الرئيسية"
         >
-          <img src="./assets/logo-mark.svg" alt="" width="48" height="48" />
-          <span class="brand-copy">
-            <strong>دروب الساحل للسفر</strong>
-            <small dir="ltr">COAST WAYS FOR TRAVEL</small>
-          </span>
+          <img
+            class="brand-lockup"
+            src="./assets/logo-original-dark.png"
+            alt="دروب الساحل للسفر — COAST WAYS FOR TRAVEL"
+            width="194"
+            height="51"
+          />
         </a>
 
         <nav class="desktop-nav" aria-label="التنقل الرئيسي">
@@ -172,12 +186,24 @@
       <section class="hero" id="home">
         <div class="hero-media" aria-hidden="true">
           <img
-            src="./assets/hero-fleet.webp"
+            class="hero-road"
+            src="./assets/hero-road.webp"
             alt=""
             width="1536"
             height="1024"
             fetchpriority="high"
           />
+          <div class="hero-car-stage">
+            <span class="hero-car-shadow"></span>
+            <img
+              class="hero-car"
+              src="./assets/hero-car.webp"
+              alt=""
+              width="1024"
+              height="498"
+              fetchpriority="high"
+            />
+          </div>
         </div>
         <div class="container hero-grid">
           <div class="hero-copy">
@@ -262,7 +288,8 @@
               <h2 id="booking-title">رحلتك، خطوة بخطوة</h2>
             </div>
             <p>
-              اختر مسارك وسيارتك، راجع السعر ثم أرسل الطلب جاهزاً عبر واتساب.
+              اختر مسارك وسيارتك، راجع السعر ثم أصدر تذكرة HOLD مبدئية خلال
+              لحظات.
             </p>
           </div>
 
@@ -645,11 +672,6 @@
                     </label>
                   </div>
 
-                  <fieldset class="recipient-picker">
-                    <legend>إرسال الطلب إلى</legend>
-                    <div id="recipient-options"></div>
-                  </fieldset>
-
                   <div
                     class="inline-error"
                     id="details-error"
@@ -679,50 +701,177 @@
                   aria-labelledby="review-step-title"
                   hidden
                 >
-                  <div class="step-heading">
-                    <span>05</span>
-                    <div>
-                      <h3 id="review-step-title">راجع طلبك</h3>
-                      <p>تأكد من التفاصيل قبل فتح واتساب وإرسال الحجز.</p>
-                    </div>
-                  </div>
-                  <div class="review-layout">
-                    <div class="review-route">
+                  <div id="booking-review-view">
+                    <div class="step-heading">
+                      <span>05</span>
                       <div>
-                        <span class="route-dot route-dot--airport">✈</span
-                        ><small>من</small><strong id="review-origin">—</strong>
-                      </div>
-                      <span class="route-line"></span>
-                      <div>
-                        <span class="route-dot">⌖</span><small>إلى</small
-                        ><strong id="review-destination">—</strong>
+                        <h3 id="review-step-title">راجع طلبك</h3>
+                        <p>
+                          راجع البيانات ثم أصدر تذكرة الحجز المبدئي بحالة HOLD.
+                        </p>
                       </div>
                     </div>
-                    <dl class="review-list" id="review-list"></dl>
-                    <div class="review-price">
-                      <span>السعر الإجمالي</span>
-                      <strong id="review-price">السعر بعد مراجعة الطلب</strong>
-                      <small id="review-price-note"
-                        >سيؤكد المكتب السعر والتوفر عبر واتساب.</small
+                    <div class="review-layout">
+                      <div class="review-route">
+                        <div>
+                          <span class="route-dot route-dot--airport">✈</span
+                          ><small>من</small
+                          ><strong id="review-origin">—</strong>
+                        </div>
+                        <span class="route-line"></span>
+                        <div>
+                          <span class="route-dot">⌖</span><small>إلى</small
+                          ><strong id="review-destination">—</strong>
+                        </div>
+                      </div>
+                      <dl class="review-list" id="review-list"></dl>
+                      <div class="review-price">
+                        <span>السعر الإجمالي</span>
+                        <strong id="review-price"
+                          >السعر بعد مراجعة الطلب</strong
+                        >
+                        <small id="review-price-note"
+                          >السعر والتوفر خاضعان لاعتماد المكتب.</small
+                        >
+                      </div>
+                    </div>
+                    <div class="hold-preview-note">
+                      <strong>تذكرة مبدئية وليست تأكيداً نهائياً</strong>
+                      <span
+                        >بعد الإصدار، لديك 48 ساعة لتثبيت الحجز لدى
+                        المكتب.</span
                       >
                     </div>
+                    <div class="step-actions step-actions--review">
+                      <button
+                        class="button button--text"
+                        type="button"
+                        data-prev-step
+                      >
+                        تعديل البيانات
+                      </button>
+                      <button class="button button--gold" type="submit">
+                        إصدار تذكرة HOLD
+                        <span aria-hidden="true">←</span>
+                      </button>
+                    </div>
                   </div>
-                  <div class="step-actions step-actions--review">
-                    <button
-                      class="button button--text"
-                      type="button"
-                      data-prev-step
-                    >
-                      تعديل البيانات
-                    </button>
-                    <button class="button button--whatsapp" type="submit">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path
-                          d="M20.5 3.5A11.8 11.8 0 0 0 12.1 0C5.6 0 .3 5.3.3 11.8c0 2.1.5 4.1 1.6 5.9L.2 24l6.4-1.7a11.8 11.8 0 0 0 5.6 1.4C18.7 23.7 24 18.4 24 11.9c0-3.2-1.2-6.1-3.5-8.4Zm-8.4 18.2c-1.7 0-3.4-.5-4.9-1.3l-.4-.2-3.8 1 1-3.7-.2-.4a9.7 9.7 0 1 1 8.3 4.6Zm5.3-7.3c-.3-.1-1.7-.8-2-1-.3-.1-.5-.1-.7.2l-.9 1.1c-.2.2-.3.3-.6.1a8 8 0 0 1-2.3-1.4 8.8 8.8 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.5.3-.5c.1-.2.1-.4 0-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.3-.2-.4-.5-.5Z"
+
+                  <div
+                    class="hold-ticket-panel"
+                    id="hold-ticket-panel"
+                    aria-live="polite"
+                    tabindex="-1"
+                    hidden
+                  >
+                    <article class="hold-ticket" id="hold-ticket">
+                      <header class="hold-ticket-header">
+                        <img
+                          src="./assets/logo-original.png"
+                          alt="دروب الساحل للسفر — COAST WAYS FOR TRAVEL"
+                          width="248"
+                          height="66"
                         />
-                      </svg>
-                      تأكيد وإرسال عبر واتساب
-                    </button>
+                        <div class="hold-status">
+                          <span dir="ltr">HOLD</span>
+                          <small>حجز مبدئي</small>
+                        </div>
+                      </header>
+
+                      <div class="hold-ticket-title">
+                        <div>
+                          <p>تذكرة حجز مبدئي</p>
+                          <h3>تفاصيل طلب الرحلة</h3>
+                        </div>
+                        <dl>
+                          <div>
+                            <dt>المرجع المبدئي</dt>
+                            <dd id="ticket-reference" dir="ltr">—</dd>
+                          </div>
+                          <div>
+                            <dt>حالة الطلب</dt>
+                            <dd>بانتظار التثبيت</dd>
+                          </div>
+                        </dl>
+                      </div>
+
+                      <div class="hold-ticket-route">
+                        <div>
+                          <small>من</small>
+                          <strong id="ticket-origin">—</strong>
+                        </div>
+                        <span aria-hidden="true">←</span>
+                        <div>
+                          <small>إلى</small>
+                          <strong id="ticket-destination">—</strong>
+                        </div>
+                      </div>
+
+                      <dl class="hold-ticket-details" id="ticket-details"></dl>
+
+                      <section class="hold-deadline" aria-label="مهلة التثبيت">
+                        <div class="hold-limit">
+                          <span>مهلة التثبيت</span>
+                          <strong>48 ساعة</strong>
+                          <small dir="ltr">TIME LIMIT: 48 HOURS</small>
+                        </div>
+                        <dl>
+                          <div>
+                            <dt>تاريخ إصدار الطلب</dt>
+                            <dd id="ticket-issued-at">—</dd>
+                          </div>
+                          <div>
+                            <dt>تنتهي المهلة في</dt>
+                            <dd id="ticket-expires-at">—</dd>
+                          </div>
+                        </dl>
+                      </section>
+
+                      <div class="hold-notice">
+                        <strong>تنبيه مهم للزبون</strong>
+                        <p>
+                          هذه التذكرة طلب حجز مبدئي بحالة HOLD وليست تأكيداً
+                          نهائياً. يجب تثبيت الحجز لدى مكتب دروب الساحل خلال 48
+                          ساعة من وقت الإصدار، وإلا تنتهي صلاحية الطلب. السيارة
+                          والسعر لا يصبحان مؤكدين إلا بعد اعتماد المكتب.
+                        </p>
+                      </div>
+
+                      <footer class="hold-ticket-footer">
+                        <span>للتواصل المباشر مع المكتب</span>
+                        <div>
+                          <bdi
+                            dir="ltr"
+                            data-whatsapp-number
+                            data-whatsapp-index="0"
+                            >0936 900 205</bdi
+                          >
+                          <bdi
+                            dir="ltr"
+                            data-whatsapp-number
+                            data-whatsapp-index="1"
+                            >0930 475 775</bdi
+                          >
+                        </div>
+                      </footer>
+                    </article>
+
+                    <div class="hold-ticket-actions">
+                      <button
+                        class="button button--text"
+                        id="edit-hold-ticket"
+                        type="button"
+                      >
+                        تعديل الطلب
+                      </button>
+                      <button
+                        class="button button--navy"
+                        id="print-hold-ticket"
+                        type="button"
+                      >
+                        طباعة أو حفظ PDF
+                      </button>
+                    </div>
                   </div>
                 </section>
               </form>
@@ -882,10 +1031,10 @@
         <div class="container trust-grid">
           <div class="trust-copy">
             <p class="eyebrow eyebrow--dark">لماذا دروب الساحل؟</p>
-            <h2 id="trust-title">خدمة واضحة من أول اختيار حتى تأكيد الرحلة</h2>
+            <h2 id="trust-title">خدمة واضحة من أول اختيار حتى إصدار التذكرة</h2>
             <p>
               صُممت تجربة الحجز لتضع تفاصيل المسار والسيارة والسعر أمامك قبل
-              التواصل النهائي.
+              إصدار طلب HOLD المبدئي والتثبيت لدى المكتب.
             </p>
             <a class="button button--navy" href="#booking">ابدأ حجزك</a>
           </div>
@@ -894,14 +1043,14 @@
               <span>01</span>
               <div>
                 <strong>خدمة على مدار الساعة</strong>
-                <p>إمكانية إرسال طلبات الحجز والاستفسار في أي وقت.</p>
+                <p>إمكانية إصدار طلب مبدئي أو الاستفسار في أي وقت.</p>
               </div>
             </li>
             <li>
               <span>02</span>
               <div>
                 <strong>تفاصيل رحلة متكاملة</strong>
-                <p>المسار والموعد والركاب والسيارة في رسالة واحدة.</p>
+                <p>المسار والموعد والركاب والسيارة في تذكرة عربية واضحة.</p>
               </div>
             </li>
             <li>
@@ -937,7 +1086,8 @@
           <h2 id="about-title">رحلة خاصة تبدأ قبل ركوب السيارة</h2>
           <p>
             نوفر خدمة نقل من وإلى المطارات وبين المدن المتاحة، مع خيارات تكسي
-            وسيدان وسيارات مرتفعة وفانات تُحجز مباشرة عبر واتساب.
+            وسيدان وسيارات مرتفعة وفانات، وتذكرة HOLD مبدئية تُثبّت لدى المكتب
+            خلال 48 ساعة.
           </p>
           <div class="about-airports">
             <span>اللاذقية</span><span>دمشق</span><span>حلب</span
@@ -952,16 +1102,13 @@
         <div>
           <a class="brand brand--light" href="#home">
             <img
-              src="./assets/logo-mark.svg"
-              alt=""
-              width="52"
-              height="52"
+              class="brand-lockup brand-lockup--footer"
+              src="./assets/logo-original-dark.png"
+              alt="دروب الساحل للسفر — COAST WAYS FOR TRAVEL"
+              width="248"
+              height="66"
               loading="lazy"
             />
-            <span class="brand-copy"
-              ><strong>دروب الساحل للسفر</strong
-              ><small dir="ltr">COAST WAYS FOR TRAVEL</small></span
-            >
           </a>
           <p>خدمة نقل خاصة تجمع بين الراحة، الالتزام وسهولة الحجز.</p>
         </div>
@@ -1052,7 +1199,7 @@
 
         const script = document.createElement("script");
         script.type = "module";
-        script.src = "./app.js?v=20260829-1";
+        script.src = "./app.js?v=20260906-2";
         document.body.appendChild(script);
 
         const scheduleExpiry = () => {

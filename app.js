@@ -10,8 +10,8 @@ import {
   formatWhatsapp,
   normalizeWhatsapp,
   stageLabel,
-} from "./data.js?v=20260829-1";
-import { flightTrackingService } from "./services/flight-tracking.js?v=20260829-1";
+} from "./data.js?v=20260906-2";
+import { flightTrackingService } from "./services/flight-tracking.js?v=20260906-2";
 
 const CATALOG_URL =
   "https://raw.githubusercontent.com/Ragnarsyria-code/coastways/site-data/docs/prices.json";
@@ -24,6 +24,7 @@ const state = {
   pickerTarget: "origin",
   prices: [],
   whatsappNumbers: [...DEFAULT_WHATSAPP_NUMBERS],
+  ticket: null,
 };
 
 function unique(values) {
@@ -73,6 +74,32 @@ function formatDate(value, style = "long") {
     month: style === "short" ? "short" : "long",
     year: style === "short" ? undefined : "numeric",
   }).format(date);
+}
+
+function formatDateTime(value) {
+  return new Intl.DateTimeFormat("ar-SY", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(value);
+}
+
+function createPreliminaryReference(issuedAt) {
+  const datePart = [
+    issuedAt.getFullYear(),
+    String(issuedAt.getMonth() + 1).padStart(2, "0"),
+    String(issuedAt.getDate()).padStart(2, "0"),
+  ].join("");
+  const timePart = [
+    String(issuedAt.getHours()).padStart(2, "0"),
+    String(issuedAt.getMinutes()).padStart(2, "0"),
+  ].join("");
+  const randomValues = new Uint16Array(1);
+  crypto.getRandomValues(randomValues);
+  const randomPart = randomValues[0]
+    .toString(36)
+    .toUpperCase()
+    .padStart(3, "0");
+  return `CW-H-${datePart}-${timePart}-${randomPart}`;
 }
 
 function pricingContext() {
@@ -165,11 +192,10 @@ async function loadCatalog() {
   if (!catalogs.length) {
     status.className = "catalog-status is-error";
     status.textContent =
-      "تعذر تحميل الأسعار حالياً. يمكنك إكمال الطلب وسيؤكد المكتب السعر عبر واتساب.";
+      "تعذر تحميل الأسعار حالياً. يمكنك إكمال الطلب وسيحدد المكتب السعر عند التثبيت.";
     renderFleet();
     renderPopularRoutes();
     updateWhatsappLinks();
-    renderRecipients();
     return;
   }
 
@@ -199,7 +225,6 @@ async function loadCatalog() {
   status.className = "catalog-status is-ready";
   status.textContent = "الأسعار محدثة وجاهزة للحجز.";
   updateWhatsappLinks();
-  renderRecipients();
   renderFleet();
   renderPopularRoutes();
   updateSummary();
@@ -221,27 +246,6 @@ function updateWhatsappLinks() {
     element.textContent = formatWhatsapp(
       state.whatsappNumbers[index] || state.whatsappNumbers[0],
     );
-  });
-}
-
-function renderRecipients() {
-  const container = $("#recipient-options");
-  container.innerHTML = state.whatsappNumbers
-    .map(
-      (number, index) => `
-        <label class="recipient-option">
-          <input type="radio" name="recipient" value="${number}" ${index === 0 ? "checked" : ""} />
-          <span>واتساب ${index + 1}</span>
-          <bdi dir="ltr">${formatWhatsapp(number)}</bdi>
-        </label>
-      `,
-    )
-    .join("");
-
-  $$('input[name="recipient"]', container).forEach((input) => {
-    input.addEventListener("change", () => {
-      state.booking.recipient = input.value;
-    });
   });
 }
 
@@ -699,8 +703,19 @@ function validateStep(step) {
   return true;
 }
 
+function resetHoldTicket() {
+  if (!state.ticket) return;
+  state.ticket = null;
+  $("#hold-ticket-panel").hidden = true;
+  $("#booking-review-view").hidden = false;
+  const progressItem = $('[data-progress-step="4"]');
+  progressItem.classList.remove("is-complete");
+  $("b", progressItem).textContent = "التأكيد";
+}
+
 function goToStep(nextStep, shouldFocus = true) {
   const boundedStep = Math.max(0, Math.min(4, nextStep));
+  if (boundedStep < 4) resetHoldTicket();
   state.currentStep = boundedStep;
   $$(".booking-step").forEach((panel) => {
     const active = Number(panel.dataset.step) === boundedStep;
@@ -766,48 +781,71 @@ function renderReview() {
     : "السعر بعد مراجعة الطلب";
   $("#review-price-note").textContent = price
     ? `${state.booking.vehicle} · ${stageLabel(state.booking.stages)}`
-    : "سيؤكد المكتب السعر والتوفر عبر واتساب.";
+    : "السعر والتوفر خاضعان لاعتماد المكتب عند التثبيت.";
 }
 
-function buildWhatsappMessage() {
+function renderHoldTicket() {
   const price = selectedPrice();
   const fullPhone = `${state.booking.passenger.countryCode}${state.booking.passenger.phone
     .replace(/\D/g, "")
     .replace(/^0/, "")}`;
-  return [
-    "طلب حجز جديد — Coast Ways",
-    "",
-    `الاسم: ${state.booking.passenger.fullName}`,
-    `رقم الهاتف: ${fullPhone}`,
-    `رقم واتساب: ${state.booking.passenger.whatsapp}`,
-    `من: ${state.booking.origin.nameAr}`,
-    `إلى: ${state.booking.destination.nameAr}`,
-    `التاريخ: ${formatDate(state.booking.date)}`,
-    `الوقت: ${state.booking.time}`,
-    `رقم الرحلة: ${state.booking.flightNumber || "غير مذكور"}`,
-    `السيارة: ${state.booking.vehicle}`,
-    `عدد الركاب: ${state.booking.passengers}`,
-    `عدد الحقائب: ${state.booking.luggage}`,
-    `طريقة الرحلة: ${stageLabel(state.booking.stages)}`,
-    `السعر: ${price ? currency(price.price) : "بعد مراجعة الطلب"}`,
-    `ملاحظات: ${state.booking.passenger.notes || "لا يوجد"}`,
-    "",
-    "أرجو تأكيد توفر السيارة والحجز.",
-  ].join("\n");
+  $("#ticket-reference").textContent = state.ticket.reference;
+  $("#ticket-origin").textContent = state.booking.origin.nameAr;
+  $("#ticket-destination").textContent = state.booking.destination.nameAr;
+  $("#ticket-issued-at").textContent = formatDateTime(state.ticket.issuedAt);
+  $("#ticket-expires-at").textContent = formatDateTime(state.ticket.expiresAt);
+
+  const details = [
+    ["اسم المسافر", state.booking.passenger.fullName],
+    ["رقم الهاتف", fullPhone, "ltr"],
+    ["رقم واتساب", state.booking.passenger.whatsapp, "ltr"],
+    ["تاريخ الرحلة", formatDate(state.booking.date)],
+    ["وقت الاستقبال", state.booking.time, "ltr"],
+    ["رقم الرحلة", state.booking.flightNumber || "غير مذكور", "ltr"],
+    ["السيارة", state.booking.vehicle],
+    ["عدد الركاب", `${state.booking.passengers} ركاب`],
+    ["عدد الحقائب", `${state.booking.luggage} حقائب`],
+    ["طريقة الرحلة", stageLabel(state.booking.stages)],
+    ["السعر", price ? currency(price.price) : "بعد مراجعة المكتب", "ltr"],
+    ["ملاحظات", state.booking.passenger.notes || "لا يوجد"],
+  ];
+  $("#ticket-details").innerHTML = details
+    .map(
+      ([label, value, direction]) =>
+        `<div><dt>${escapeHtml(label)}</dt><dd ${direction ? `dir="${direction}"` : ""}>${escapeHtml(value)}</dd></div>`,
+    )
+    .join("");
 }
 
-function submitBooking(event) {
+function issueHoldTicket(event) {
   event.preventDefault();
   if (![0, 1, 2, 3].every(validateStep)) {
     const invalidStep = [0, 1, 2, 3].find((step) => !validateStep(step));
     goToStep(invalidStep ?? 0);
     return;
   }
-  const recipient =
-    normalizeWhatsapp(state.booking.recipient) || state.whatsappNumbers[0];
-  window.location.href = `https://wa.me/${recipient}?text=${encodeURIComponent(
-    buildWhatsappMessage(),
-  )}`;
+
+  const issuedAt = new Date();
+  const expiresAt = new Date(issuedAt.getTime() + 48 * 60 * 60 * 1000);
+  state.ticket = {
+    reference: createPreliminaryReference(issuedAt),
+    issuedAt,
+    expiresAt,
+  };
+  renderHoldTicket();
+  $("#booking-review-view").hidden = true;
+  const ticketPanel = $("#hold-ticket-panel");
+  ticketPanel.hidden = false;
+  const progressItem = $('[data-progress-step="4"]');
+  progressItem.classList.add("is-complete");
+  $("b", progressItem).textContent = "التذكرة";
+  ticketPanel.focus({ preventScroll: true });
+  ticketPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function editHoldTicket() {
+  resetHoldTicket();
+  goToStep(3);
 }
 
 async function checkFlightNumber() {
@@ -839,13 +877,27 @@ function initializeHeader() {
   handleScroll();
   window.addEventListener("scroll", handleScroll, { passive: true });
 
-  const heroBooking = $(".hero-quick-book");
-  if (heroBooking && "IntersectionObserver" in window) {
+  const protectedSections = [$("#home"), $("#booking")].filter(Boolean);
+  if (protectedSections.length && "IntersectionObserver" in window) {
+    const visibleSections = new Set();
+    const updateFloatingVisibility = () => {
+      floating.classList.toggle(
+        "is-hidden",
+        window.innerWidth < 860 && visibleSections.size > 0,
+      );
+    };
     const observer = new IntersectionObserver(
-      ([entry]) => floating.classList.toggle("is-hidden", entry.isIntersecting),
-      { threshold: 0.12 },
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) visibleSections.add(entry.target);
+          else visibleSections.delete(entry.target);
+        });
+        updateFloatingVisibility();
+      },
+      { threshold: 0.03 },
     );
-    observer.observe(heroBooking);
+    protectedSections.forEach((section) => observer.observe(section));
+    window.addEventListener("resize", updateFloatingVisibility);
   }
 
   menuButton.addEventListener("click", () => {
@@ -976,7 +1028,9 @@ function initializeBooking() {
     }
   });
 
-  $("#booking-form").addEventListener("submit", submitBooking);
+  $("#booking-form").addEventListener("submit", issueHoldTicket);
+  $("#edit-hold-ticket").addEventListener("click", editHoldTicket);
+  $("#print-hold-ticket").addEventListener("click", () => window.print());
   syncRouteUI();
   renderVehicles();
   updateSummary();
