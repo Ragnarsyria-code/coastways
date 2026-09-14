@@ -55,6 +55,21 @@ function currency(value) {
   return `$${Number(value).toLocaleString("en-US")}`;
 }
 
+function passengerLabel(count) {
+  if (count === 1) return "راكب واحد";
+  if (count === 2) return "راكبان";
+  if (count >= 3 && count <= 10) return `${count} ركاب`;
+  return `${count} راكباً`;
+}
+
+function luggageLabel(count) {
+  if (count === 0) return "دون حقائب";
+  if (count === 1) return "حقيبة واحدة";
+  if (count === 2) return "حقيبتان";
+  if (count >= 3 && count <= 10) return `${count} حقائب`;
+  return `${count} حقيبة`;
+}
+
 function todayValue(offset = 0) {
   const date = new Date();
   date.setDate(date.getDate() + offset);
@@ -798,8 +813,8 @@ function renderReview() {
     ["التاريخ", formatDate(state.booking.date)],
     ["الوقت", state.booking.time, "ltr"],
     ["السيارة", state.booking.vehicle],
-    ["الركاب", `${state.booking.passengers} ركاب`],
-    ["الحقائب", `${state.booking.luggage} حقائب`],
+    ["الركاب", passengerLabel(state.booking.passengers)],
+    ["الحقائب", luggageLabel(state.booking.luggage)],
     ["طريقة الرحلة", stageLabel(state.booking.stages)],
   ];
   if (state.booking.flightNumber) {
@@ -838,8 +853,8 @@ function renderHoldTicket() {
     ["وقت الاستقبال", state.booking.time, "ltr"],
     ["رقم الرحلة", state.booking.flightNumber || "غير مذكور", "ltr"],
     ["السيارة", state.booking.vehicle],
-    ["عدد الركاب", `${state.booking.passengers} ركاب`],
-    ["عدد الحقائب", `${state.booking.luggage} حقائب`],
+    ["عدد الركاب", passengerLabel(state.booking.passengers)],
+    ["عدد الحقائب", luggageLabel(state.booking.luggage)],
     ["طريقة الرحلة", stageLabel(state.booking.stages)],
     ["السعر", price ? currency(price.price) : "بعد مراجعة المكتب", "ltr"],
     ["ملاحظات", state.booking.passenger.notes || "لا يوجد"],

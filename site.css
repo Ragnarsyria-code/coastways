@@ -302,6 +302,13 @@ svg {
   backdrop-filter: blur(14px);
 }
 
+.booking-page .site-header {
+  border-color: var(--line-dark);
+  background: rgba(4, 17, 28, 0.96);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(14px);
+}
+
 .header-inner {
   min-height: var(--header-height);
   display: flex;
@@ -605,16 +612,18 @@ svg {
 .hero-slider-controls {
   position: absolute;
   z-index: 5;
-  inset-inline-start: 50%;
+  inset-inline: 0;
   inset-block-end: 24px;
   display: flex;
+  inline-size: max-content;
+  max-inline-size: calc(100% - 32px);
   gap: 4px;
+  margin-inline: auto;
   padding: 5px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 18px;
   background: rgba(7, 25, 39, 0.62);
   backdrop-filter: blur(12px);
-  transform: translateX(-50%);
 }
 
 .hero-slider-controls button {
