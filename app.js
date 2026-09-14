@@ -1,7 +1,5 @@
 import {
-  AIRPORTS,
   BORDER_ROUTES,
-  CITIES,
   DEFAULT_WHATSAPP_NUMBERS,
   LOCATIONS,
   POPULAR_ROUTE_KEYS,
@@ -247,6 +245,57 @@ function updateWhatsappLinks() {
       state.whatsappNumbers[index] || state.whatsappNumbers[0],
     );
   });
+}
+
+function initializeHeroSlider() {
+  if (document.body.classList.contains("booking-page")) return;
+  const slides = $$("[data-hero-slide]");
+  const buttons = $$("[data-hero-slide-button]");
+  const hero = $(".hero");
+  if (!hero || slides.length < 2 || buttons.length !== slides.length) return;
+
+  let activeIndex = 0;
+  let intervalId = null;
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  const showSlide = (nextIndex) => {
+    activeIndex = (nextIndex + slides.length) % slides.length;
+    slides.forEach((slide, index) => {
+      const active = index === activeIndex;
+      slide.classList.toggle("is-active", active);
+      slide.setAttribute("aria-hidden", String(!active));
+    });
+    buttons.forEach((button, index) => {
+      const active = index === activeIndex;
+      button.classList.toggle("is-active", active);
+      if (active) button.setAttribute("aria-current", "true");
+      else button.removeAttribute("aria-current");
+    });
+  };
+
+  const stopRotation = () => {
+    if (intervalId) window.clearInterval(intervalId);
+    intervalId = null;
+  };
+  const startRotation = () => {
+    if (reducedMotion || intervalId) return;
+    intervalId = window.setInterval(() => showSlide(activeIndex + 1), 5500);
+  };
+
+  buttons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      showSlide(index);
+      stopRotation();
+      startRotation();
+    });
+  });
+  hero.addEventListener("mouseenter", stopRotation);
+  hero.addEventListener("mouseleave", startRotation);
+  hero.addEventListener("focusin", stopRotation);
+  hero.addEventListener("focusout", startRotation);
+  startRotation();
 }
 
 function locationIcon(type) {
@@ -556,30 +605,16 @@ function renderPopularRoutes() {
 
   $$(".route-card", container).forEach((card) => {
     card.addEventListener("click", () => {
-      const origin = AIRPORTS.find(
-        (location) => location.value === card.dataset.airport,
-      );
-      const destination = [...CITIES, ...BORDER_ROUTES].find(
-        (location) => location.value === card.dataset.destination,
-      );
-      state.booking.origin = origin;
-      state.booking.destination = destination;
       const routeEntry = state.prices.find(
         (item) =>
           item.airport === card.dataset.airport &&
           item.destination === card.dataset.destination,
       );
-      state.booking.stages = Number(routeEntry?.stages || 1);
-      const stageInput = $(
-        `input[name="stages"][value="${state.booking.stages}"]`,
-      );
-      if (stageInput) stageInput.checked = true;
-      state.booking.vehicle = "";
-      syncRouteUI();
-      renderVehicles();
-      updateSummary();
-      goToStep(0, false);
-      $("#booking").scrollIntoView({ behavior: "smooth", block: "start" });
+      const bookingUrl = new URL("./booking/", document.baseURI);
+      bookingUrl.searchParams.set("origin", card.dataset.airport);
+      bookingUrl.searchParams.set("destination", card.dataset.destination);
+      bookingUrl.searchParams.set("stages", String(routeEntry?.stages || 1));
+      window.location.assign(bookingUrl);
     });
   });
 }
@@ -1036,8 +1071,27 @@ function initializeBooking() {
   updateSummary();
 }
 
+function initializeBookingFromUrl() {
+  if (!document.body.classList.contains("booking-page")) return;
+  const parameters = new URLSearchParams(window.location.search);
+  const originValue = parameters.get("origin");
+  const destinationValue = parameters.get("destination");
+  const stages = Number(parameters.get("stages"));
+  const origin = LOCATIONS.find((location) => location.value === originValue);
+  const destination = LOCATIONS.find(
+    (location) => location.value === destinationValue,
+  );
+  if (origin) state.booking.origin = origin;
+  if (destination) state.booking.destination = destination;
+  if ([1, 2].includes(stages)) state.booking.stages = stages;
+  const stageInput = $(`input[name="stages"][value="${state.booking.stages}"]`);
+  if (stageInput) stageInput.checked = true;
+}
+
 function initialize() {
   initializeHeader();
+  initializeHeroSlider();
+  initializeBookingFromUrl();
   initializeBooking();
   loadCatalog();
 }

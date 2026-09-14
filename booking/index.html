@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
+    <base href="../" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -9,7 +10,7 @@
     <meta name="theme-color" content="#071927" />
     <meta
       name="description"
-      content="دروب الساحل للسفر لخدمات النقل الخاص من وإلى مطارات اللاذقية ودمشق وحلب وبيروت، مع تسعير واضح وتذكرة حجز مبدئي."
+      content="احجز رحلة نقل خاصة مع دروب الساحل للسفر، واختر المطار والوجهة والسيارة ثم أصدر تذكرة HOLD مبدئية صالحة 48 ساعة."
     />
     <meta
       name="keywords"
@@ -17,35 +18,23 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ar_SY" />
-    <meta property="og:title" content="دروب الساحل للسفر | نقل مطارات خاص" />
+    <meta property="og:title" content="احجز رحلتك | دروب الساحل للسفر" />
     <meta
       property="og:description"
       content="احجز تنقّلك الخاص من المطار إلى وجهتك بخطوات واضحة واحصل على تذكرة HOLD مبدئية."
     />
-    <meta property="og:url" content="https://coastways.surge.sh/" />
+    <meta property="og:url" content="https://coastways.surge.sh/booking/" />
     <meta
       property="og:image"
       content="https://coastways.surge.sh/assets/hero-road.webp"
     />
-    <title>دروب الساحل للسفر | نقل خاص من وإلى المطار</title>
+    <title>احجز رحلتك | دروب الساحل للسفر</title>
     <link rel="icon" href="./assets/logo-icon.png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
       rel="stylesheet"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href="./assets/hero-road.webp"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href="./assets/hero-car.webp"
-      fetchpriority="high"
     />
     <link rel="stylesheet" href="./site.css?v=20260914-1" />
     <script>
@@ -80,7 +69,7 @@
       }
     </script>
   </head>
-  <body class="home-page">
+  <body class="booking-page">
     <section class="suspension-screen" aria-labelledby="suspension-title">
       <div class="suspension-card">
         <img
@@ -100,7 +89,7 @@
       </div>
     </section>
 
-    <a class="skip-link" href="./booking/">انتقل إلى الحجز</a>
+    <a class="skip-link" href="./booking/#booking">انتقل إلى نموذج الحجز</a>
 
     <header
       class="site-header"
@@ -189,7 +178,7 @@
               alt=""
               width="1536"
               height="1024"
-              fetchpriority="high"
+              loading="lazy"
             />
             <div class="hero-car-stage">
               <span class="hero-car-shadow"></span>
@@ -199,7 +188,7 @@
                 alt=""
                 width="1024"
                 height="498"
-                fetchpriority="high"
+                loading="lazy"
               />
             </div>
           </div>
