@@ -625,7 +625,7 @@ function renderPopularRoutes() {
           item.airport === card.dataset.airport &&
           item.destination === card.dataset.destination,
       );
-      const bookingUrl = new URL("./booking/", document.baseURI);
+      const bookingUrl = new URL("./booking/index.html", document.baseURI);
       bookingUrl.searchParams.set("origin", card.dataset.airport);
       bookingUrl.searchParams.set("destination", card.dataset.destination);
       bookingUrl.searchParams.set("stages", String(routeEntry?.stages || 1));
