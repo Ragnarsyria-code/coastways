@@ -13,6 +13,20 @@ import { flightTrackingService } from "./services/flight-tracking.js?v=20260906-
 
 const CATALOG_URL =
   "https://raw.githubusercontent.com/Ragnarsyria-code/coastways/site-data/docs/prices.json";
+const PDF_SCRIPTS = [
+  {
+    src: "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js",
+    integrity:
+      "sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H",
+    isReady: () => typeof window.html2canvas === "function",
+  },
+  {
+    src: "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
+    integrity:
+      "sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk",
+    isReady: () => Boolean(window.jspdf?.jsPDF),
+  },
+];
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
@@ -862,6 +876,187 @@ function renderHoldTicket() {
     .join("");
 }
 
+function loadExternalScript({ src, integrity, isReady }) {
+  if (isReady()) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    const handleLoad = () =>
+      isReady() ? resolve() : reject(new Error("تعذر تحميل مكتبة PDF."));
+    if (existing) {
+      existing.addEventListener("load", handleLoad, { once: true });
+      existing.addEventListener(
+        "error",
+        () => reject(new Error("تعذر تحميل مكتبة PDF.")),
+        { once: true },
+      );
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = src;
+    script.integrity = integrity;
+    script.crossOrigin = "anonymous";
+    script.addEventListener("load", handleLoad, { once: true });
+    script.addEventListener(
+      "error",
+      () => reject(new Error("تعذر تحميل مكتبة PDF.")),
+      { once: true },
+    );
+    document.head.appendChild(script);
+  });
+}
+
+async function ensurePdfLibraries() {
+  await Promise.all(PDF_SCRIPTS.map(loadExternalScript));
+}
+
+async function waitForTicketImages(ticket) {
+  await Promise.all(
+    $$("img", ticket).map((image) => {
+      if (image.complete) return Promise.resolve();
+      return new Promise((resolve) => {
+        image.addEventListener("load", resolve, { once: true });
+        image.addEventListener("error", resolve, { once: true });
+      });
+    }),
+  );
+}
+
+async function createHoldTicketPdf() {
+  await ensurePdfLibraries();
+  await document.fonts?.ready;
+  const source = $("#hold-ticket");
+  const exportHost = document.createElement("div");
+  exportHost.className = "pdf-export-host";
+  exportHost.setAttribute("aria-hidden", "true");
+  const ticket = source.cloneNode(true);
+  ticket.removeAttribute("id");
+  $$("[id]", ticket).forEach((element) => element.removeAttribute("id"));
+  exportHost.appendChild(ticket);
+  document.body.appendChild(exportHost);
+
+  try {
+    await waitForTicketImages(ticket);
+    const canvas = await window.html2canvas(ticket, {
+      backgroundColor: "#ffffff",
+      logging: false,
+      scale: 2,
+      useCORS: true,
+      windowWidth: 1200,
+    });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+      compress: true,
+    });
+    const pageWidth = 190;
+    const pageHeight = 277;
+    const scale = Math.min(
+      pageWidth / canvas.width,
+      pageHeight / canvas.height,
+    );
+    const imageWidth = canvas.width * scale;
+    const imageHeight = canvas.height * scale;
+    pdf.addImage(
+      canvas.toDataURL("image/jpeg", 0.92),
+      "JPEG",
+      (210 - imageWidth) / 2,
+      (297 - imageHeight) / 2,
+      imageWidth,
+      imageHeight,
+      undefined,
+      "FAST",
+    );
+    return new File(
+      [pdf.output("blob")],
+      `coastways-hold-${state.ticket.reference}.pdf`,
+      { type: "application/pdf" },
+    );
+  } finally {
+    exportHost.remove();
+  }
+}
+
+function prepareHoldTicketPdf() {
+  if (!state.ticket.pdfPromise) {
+    state.ticket.pdfPromise = createHoldTicketPdf().catch((error) => {
+      if (state.ticket) state.ticket.pdfPromise = null;
+      throw error;
+    });
+  }
+  return state.ticket.pdfPromise;
+}
+
+function downloadFile(file) {
+  const url = URL.createObjectURL(file);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = file.name;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 30_000);
+}
+
+function holdWhatsappMessage() {
+  const price = selectedPrice();
+  const fullPhone = `${state.booking.passenger.countryCode}${state.booking.passenger.phone
+    .replace(/\D/g, "")
+    .replace(/^0/, "")}`;
+  return [
+    "طلب HOLD جديد — دروب الساحل للسفر",
+    `المرجع المبدئي: ${state.ticket.reference}`,
+    `الاسم: ${state.booking.passenger.fullName}`,
+    `رقم الهاتف: ${fullPhone}`,
+    `من: ${state.booking.origin.nameAr}`,
+    `إلى: ${state.booking.destination.nameAr}`,
+    `تاريخ الرحلة: ${formatDate(state.booking.date)}`,
+    `وقت الاستقبال: ${state.booking.time}`,
+    `رقم الرحلة: ${state.booking.flightNumber || "غير مذكور"}`,
+    `السيارة: ${state.booking.vehicle}`,
+    `الركاب: ${passengerLabel(state.booking.passengers)}`,
+    `الحقائب: ${luggageLabel(state.booking.luggage)}`,
+    `طريقة الرحلة: ${stageLabel(state.booking.stages)}`,
+    `السعر: ${price ? currency(price.price) : "بعد مراجعة المكتب"}`,
+    `تنتهي مهلة التثبيت: ${formatDateTime(state.ticket.expiresAt)}`,
+    `ملاحظات: ${state.booking.passenger.notes || "لا يوجد"}`,
+    "",
+    "تم تنزيل ملف التذكرة PDF على جهاز الزبون لإرفاقه في هذه المحادثة.",
+    "يرجى تأكيد استلام الطلب وتثبيته خلال 48 ساعة.",
+  ].join("\n");
+}
+
+async function shareHoldTicket(event) {
+  const button = event.currentTarget;
+  const buttons = $$("[data-share-hold]");
+  const status = $("#hold-share-status");
+  buttons.forEach((item) => {
+    item.disabled = true;
+  });
+  status.textContent = "جارٍ إنشاء ملف PDF وتجهيز محادثة واتساب…";
+
+  try {
+    const file = await prepareHoldTicketPdf();
+    downloadFile(file);
+    const index = Number(button.dataset.whatsappIndex || 0);
+    const number = state.whatsappNumbers[index] || state.whatsappNumbers[0];
+    status.textContent =
+      "تم تنزيل ملف PDF. أرفقه في المحادثة التي ستُفتح ثم اضغط إرسال.";
+    window.setTimeout(() => {
+      window.location.assign(
+        `https://wa.me/${number}?text=${encodeURIComponent(holdWhatsappMessage())}`,
+      );
+    }, 350);
+  } catch {
+    status.textContent =
+      "تعذر إنشاء ملف PDF. استخدم «طباعة أو حفظ PDF» ثم أرفقه يدوياً عبر واتساب.";
+    buttons.forEach((item) => {
+      item.disabled = false;
+    });
+  }
+}
+
 function issueHoldTicket(event) {
   event.preventDefault();
   if (![0, 1, 2, 3].every(validateStep)) {
@@ -886,6 +1081,21 @@ function issueHoldTicket(event) {
   $("b", progressItem).textContent = "التذكرة";
   ticketPanel.focus({ preventScroll: true });
   ticketPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  const status = $("#hold-share-status");
+  status.textContent = "جارٍ تجهيز ملف التذكرة…";
+  prepareHoldTicketPdf()
+    .then(() => {
+      if (state.ticket) {
+        status.textContent =
+          "التذكرة جاهزة. اختر رقم المكتب لتنزيل PDF وفتح واتساب.";
+      }
+    })
+    .catch(() => {
+      if (state.ticket) {
+        status.textContent =
+          "سيتم تجهيز PDF عند اختيار رقم المكتب؛ تأكد من اتصال الإنترنت.";
+      }
+    });
 }
 
 function editHoldTicket() {
@@ -1076,6 +1286,9 @@ function initializeBooking() {
   $("#booking-form").addEventListener("submit", issueHoldTicket);
   $("#edit-hold-ticket").addEventListener("click", editHoldTicket);
   $("#print-hold-ticket").addEventListener("click", () => window.print());
+  $$("[data-share-hold]").forEach((button) => {
+    button.addEventListener("click", shareHoldTicket);
+  });
   syncRouteUI();
   renderVehicles();
   updateSummary();
