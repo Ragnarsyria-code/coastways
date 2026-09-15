@@ -271,9 +271,6 @@ function initializeHeroSlider() {
 
   let activeIndex = 0;
   let intervalId = null;
-  const reducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
 
   const showSlide = (nextIndex) => {
     activeIndex = (nextIndex + slides.length) % slides.length;
@@ -295,7 +292,7 @@ function initializeHeroSlider() {
     intervalId = null;
   };
   const startRotation = () => {
-    if (reducedMotion || intervalId) return;
+    if (intervalId) return;
     intervalId = window.setInterval(() => showSlide(activeIndex + 1), 5500);
   };
 
@@ -306,8 +303,6 @@ function initializeHeroSlider() {
       startRotation();
     });
   });
-  hero.addEventListener("mouseenter", stopRotation);
-  hero.addEventListener("mouseleave", startRotation);
   hero.addEventListener("focusin", stopRotation);
   hero.addEventListener("focusout", startRotation);
   startRotation();
