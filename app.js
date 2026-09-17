@@ -1027,30 +1027,39 @@ function holdWhatsappMessage() {
   ].join("\n");
 }
 
+function updateHoldShareStatus(message, status = "loading") {
+  const element = $("#hold-share-status");
+  element.textContent = message;
+  element.dataset.status = status;
+}
+
 async function shareHoldTicket(event) {
   const button = event.currentTarget;
   const buttons = $$("[data-share-hold]");
-  const status = $("#hold-share-status");
   buttons.forEach((item) => {
     item.disabled = true;
   });
-  status.textContent = "جارٍ إنشاء ملف PDF وتجهيز محادثة واتساب…";
+  updateHoldShareStatus("جارٍ إنشاء ملف PDF وتجهيز محادثة واتساب…", "loading");
 
   try {
     const file = await prepareHoldTicketPdf();
     downloadFile(file);
     const index = Number(button.dataset.whatsappIndex || 0);
     const number = state.whatsappNumbers[index] || state.whatsappNumbers[0];
-    status.textContent =
-      "تم تنزيل ملف PDF. أرفقه في المحادثة التي ستُفتح ثم اضغط إرسال.";
+    updateHoldShareStatus(
+      "تم تنزيل ملف PDF. أرفقه في المحادثة التي ستُفتح ثم اضغط إرسال.",
+      "ready",
+    );
     window.setTimeout(() => {
       window.location.assign(
         `https://wa.me/${number}?text=${encodeURIComponent(holdWhatsappMessage())}`,
       );
     }, 350);
   } catch {
-    status.textContent =
-      "تعذر إنشاء ملف PDF. استخدم «طباعة أو حفظ PDF» ثم أرفقه يدوياً عبر واتساب.";
+    updateHoldShareStatus(
+      "تعذر إنشاء ملف PDF. استخدم «طباعة أو حفظ PDF» ثم أرفقه يدوياً عبر واتساب.",
+      "error",
+    );
     buttons.forEach((item) => {
       item.disabled = false;
     });
@@ -1081,19 +1090,22 @@ function issueHoldTicket(event) {
   $("b", progressItem).textContent = "التذكرة";
   ticketPanel.focus({ preventScroll: true });
   ticketPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-  const status = $("#hold-share-status");
-  status.textContent = "جارٍ تجهيز ملف التذكرة…";
+  updateHoldShareStatus("جارٍ تجهيز ملف التذكرة…", "loading");
   prepareHoldTicketPdf()
     .then(() => {
       if (state.ticket) {
-        status.textContent =
-          "التذكرة جاهزة. اختر رقم المكتب لتنزيل PDF وفتح واتساب.";
+        updateHoldShareStatus(
+          "التذكرة جاهزة. اختر رقم المكتب لتنزيل PDF وفتح واتساب.",
+          "ready",
+        );
       }
     })
     .catch(() => {
       if (state.ticket) {
-        status.textContent =
-          "سيتم تجهيز PDF عند اختيار رقم المكتب؛ تأكد من اتصال الإنترنت.";
+        updateHoldShareStatus(
+          "سيتم تجهيز PDF عند اختيار رقم المكتب؛ تأكد من اتصال الإنترنت.",
+          "error",
+        );
       }
     });
 }
@@ -1251,12 +1263,22 @@ function initializeBooking() {
   });
 
   $("#flight-number").addEventListener("blur", checkFlightNumber);
+  const whatsappInput = $("#passenger-whatsapp");
   $("#phone").addEventListener("blur", () => {
-    if (!$("#passenger-whatsapp").value.trim()) {
+    if (!whatsappInput.value.trim()) {
       const digits = $("#phone").value.replace(/\D/g, "").replace(/^0/, "");
-      $("#passenger-whatsapp").value =
+      whatsappInput.value =
         digits && `${state.booking.passenger.countryCode}${digits}`;
+      if (digits) whatsappInput.dataset.mirrored = "true";
     }
+  });
+  whatsappInput.addEventListener("focus", () => {
+    if (whatsappInput.dataset.mirrored === "true") {
+      whatsappInput.setSelectionRange(0, whatsappInput.value.length);
+    }
+  });
+  whatsappInput.addEventListener("input", () => {
+    delete whatsappInput.dataset.mirrored;
   });
 
   const countryButton = $("#country-code");
