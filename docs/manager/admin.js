@@ -1,7 +1,27 @@
 const REPOSITORY = "Ragnarsyria-code/coastways";
 const FILE_PATH = "docs/prices.json";
-const state = { prices: [], whatsapp: "", sha: "", token: "" };
+const DATA_BRANCH = "site-data";
+const DEFAULT_WHATSAPP_NUMBERS = ["963936900205", "963930475775"];
+const state = {
+  prices: [],
+  whatsappNumbers: [...DEFAULT_WHATSAPP_NUMBERS],
+  updatedAt: 0,
+  sha: "",
+  token: "",
+};
 const $ = (selector) => document.querySelector(selector);
+
+function normalizeWhatsapp(value) {
+  const digits = String(value || "").replace(/\D/g, "");
+  return digits.startsWith("0") ? `963${digits.slice(1)}` : digits;
+}
+
+function formatWhatsapp(value) {
+  const digits = normalizeWhatsapp(value);
+  return digits.startsWith("963") && digits.length === 12
+    ? `0${digits.slice(3, 6)} ${digits.slice(6, 9)} ${digits.slice(9)}`
+    : `+${digits}`;
+}
 
 function decodeContent(content) {
   const bytes = Uint8Array.from(atob(content.replace(/\n/g, "")), (character) =>
@@ -20,7 +40,8 @@ function encodeContent(data) {
 }
 
 async function githubRequest(options = {}) {
-  const response = await fetch(`https://api.github.com/repos/${REPOSITORY}/contents/${FILE_PATH}`, {
+  const query = options.method === "PUT" ? "" : `?ref=${DATA_BRANCH}`;
+  const response = await fetch(`https://api.github.com/repos/${REPOSITORY}/contents/${FILE_PATH}${query}`, {
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${state.token}`,
@@ -50,23 +71,39 @@ async function loadCatalog() {
   const file = await githubRequest();
   const catalog = decodeContent(file.content);
   state.sha = file.sha;
-  state.prices = catalog.prices;
-  state.whatsapp = catalog.whatsapp;
-  $("#whatsapp-input").value = catalog.whatsapp;
-  $("#whatsapp-display").textContent = `+${catalog.whatsapp}`;
+  state.prices = catalog.prices.map((price) => ({ ...price, stages: price.stages || 1 }));
+  state.whatsappNumbers = [
+    ...new Set(
+      (catalog.whatsapp_numbers?.length ? catalog.whatsapp_numbers : [catalog.whatsapp])
+        .map(normalizeWhatsapp)
+        .filter(Boolean),
+    ),
+  ];
+  if (!state.whatsappNumbers.length) state.whatsappNumbers = [...DEFAULT_WHATSAPP_NUMBERS];
+  state.updatedAt = catalog.updated_at || 0;
+  $("#whatsapp-input-1").value = state.whatsappNumbers[0] || "";
+  $("#whatsapp-input-2").value = state.whatsappNumbers[1] || "";
+  $("#whatsapp-display").textContent = state.whatsappNumbers.map(formatWhatsapp).join(" / ");
   $("#prices-count").textContent = catalog.prices.length;
   $("#airports-count").textContent = new Set(catalog.prices.map((price) => price.airport)).size;
   renderPrices();
 }
 
 async function publishCatalog(message) {
-  const content = encodeContent({ prices: state.prices, whatsapp: state.whatsapp });
+  const updatedAt = Date.now();
+  const content = encodeContent({
+    prices: state.prices,
+    whatsapp: state.whatsappNumbers[0],
+    whatsapp_numbers: state.whatsappNumbers,
+    updated_at: updatedAt,
+  });
   const result = await githubRequest({
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, content, sha: state.sha, branch: "main" }),
+    body: JSON.stringify({ message, content, sha: state.sha, branch: DATA_BRANCH }),
   });
   state.sha = result.content.sha;
+  state.updatedAt = updatedAt;
   toast("تم الحفظ والنشر، ستظهر التغييرات خلال دقيقة");
 }
 
@@ -89,6 +126,7 @@ function renderPrices() {
         <tr>
           <td><b>${item.airport}</b></td>
           <td>${item.destination}</td>
+          <td>${item.stages === 2 ? "مرحلتان" : "مرحلة واحدة"}</td>
           <td><span class="vehicle-pill">${item.vehicle}</span></td>
           <td>${item.min_passengers} – ${item.max_passengers}</td>
           <td><strong class="table-price">$${Number(item.price).toLocaleString("en-US")}</strong></td>
@@ -107,6 +145,7 @@ function openDialog(item = null) {
   $("#dialog-mode").textContent = item ? "تعديل السعر" : "سعر جديد";
   $("#edit-airport").value = item?.airport || "";
   $("#edit-destination").value = item?.destination || "";
+  $("#edit-stages").value = item?.stages || 1;
   $("#edit-vehicle").value = item?.vehicle || "";
   $("#edit-price").value = item?.price || "";
   $("#edit-min").value = item?.min_passengers || 1;
@@ -121,6 +160,7 @@ async function savePrice(event) {
     id: id || Math.max(0, ...state.prices.map((price) => price.id)) + 1,
     airport: $("#edit-airport").value.trim(),
     destination: $("#edit-destination").value.trim(),
+    stages: Number($("#edit-stages").value),
     vehicle: $("#edit-vehicle").value.trim(),
     price: Number($("#edit-price").value),
     min_passengers: Number($("#edit-min").value),
@@ -191,13 +231,25 @@ $("#prices-table").addEventListener("click", async (event) => {
 
 $("#settings-form").addEventListener("submit", async (event) => {
   event.preventDefault();
-  const oldWhatsapp = state.whatsapp;
-  state.whatsapp = $("#whatsapp-input").value.trim();
+  const oldWhatsappNumbers = [...state.whatsappNumbers];
+  const whatsappNumbers = [
+    normalizeWhatsapp($("#whatsapp-input-1").value),
+    normalizeWhatsapp($("#whatsapp-input-2").value),
+  ];
+  if (whatsappNumbers.some((number) => !number.startsWith("963") || number.length !== 12)) {
+    toast("أدخل رقمين سوريين صحيحين، مثال: 0936900205", true);
+    return;
+  }
+  if (new Set(whatsappNumbers).size !== whatsappNumbers.length) {
+    toast("يجب أن يكون رقما واتساب مختلفين", true);
+    return;
+  }
+  state.whatsappNumbers = whatsappNumbers;
   try {
-    await publishCatalog("تحديث رقم واتساب");
+    await publishCatalog("تحديث أرقام واتساب");
     await loadCatalog();
   } catch (error) {
-    state.whatsapp = oldWhatsapp;
+    state.whatsappNumbers = oldWhatsappNumbers;
     toast(error.message, true);
   }
 });
