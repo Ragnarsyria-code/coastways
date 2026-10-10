@@ -55,20 +55,6 @@
       fetchpriority="high"
     />
     <link rel="stylesheet" href="./site.css?v=20260915-2" />
-    <script>
-      (() => {
-        const trialEnd = Date.parse("2026-09-23T00:00:00+03:00");
-        const expired = Date.now() >= trialEnd;
-        window.COASTWAYS_TRIAL_END = trialEnd;
-        window.COASTWAYS_TRIAL_EXPIRED = expired;
-        if (expired) {
-          document.documentElement.classList.add("trial-expired");
-          document.title = "الموقع متوقف | دروب الساحل للسفر";
-          document.querySelector('meta[name="description"]').content =
-            "انتهت الفترة التجريبية لموقع دروب الساحل للسفر، والموقع متوقف عن الخدمة حالياً.";
-        }
-      })();
-    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -1322,25 +1308,6 @@
       </div>
     </dialog>
 
-    <script>
-      (() => {
-        if (window.COASTWAYS_TRIAL_EXPIRED) return;
-
-        const script = document.createElement("script");
-        script.type = "module";
-        script.src = "./app.js?v=20260915-2";
-        document.body.appendChild(script);
-
-        const scheduleExpiry = () => {
-          const remaining = window.COASTWAYS_TRIAL_END - Date.now();
-          if (remaining <= 0) {
-            window.location.reload();
-            return;
-          }
-          window.setTimeout(scheduleExpiry, Math.min(remaining, 2147483647));
-        };
-        scheduleExpiry();
-      })();
-    </script>
+    <script type="module" src="./app.js?v=20260915-2"></script>
   </body>
 </html>
