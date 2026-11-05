@@ -772,8 +772,17 @@ function resetHoldTicket() {
   $("b", progressItem).textContent = "التأكيد";
 }
 
+function trackEvent(path, title) {
+  try {
+    window.goatcounter?.count?.({ path, title, event: true });
+  } catch {}
+}
+
 function goToStep(nextStep, shouldFocus = true) {
   const boundedStep = Math.max(0, Math.min(4, nextStep));
+  if (boundedStep > 0 && boundedStep !== state.currentStep) {
+    trackEvent(`booking-step-${boundedStep + 1}`, `خطوة الحجز ${boundedStep + 1}`);
+  }
   if (boundedStep < 4) resetHoldTicket();
   state.currentStep = boundedStep;
   $$(".booking-step").forEach((panel) => {
@@ -1050,6 +1059,7 @@ async function shareHoldTicket(event) {
       "تم تنزيل ملف PDF. أرفقه في المحادثة التي ستُفتح ثم اضغط إرسال.",
       "ready",
     );
+    trackEvent(`hold-whatsapp-office-${index + 1}`, `إرسال HOLD إلى واتساب المكتب ${index + 1}`);
     window.setTimeout(() => {
       window.location.assign(
         `https://wa.me/${number}?text=${encodeURIComponent(holdWhatsappMessage())}`,
@@ -1082,6 +1092,7 @@ function issueHoldTicket(event) {
     expiresAt,
   };
   renderHoldTicket();
+  trackEvent("hold-issued", "إصدار تذكرة HOLD");
   $("#booking-review-view").hidden = true;
   const ticketPanel = $("#hold-ticket-panel");
   ticketPanel.hidden = false;
@@ -1305,6 +1316,13 @@ function initializeBooking() {
     }
   });
 
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest?.("[data-whatsapp-link]");
+    if (link) {
+      const index = Number(link.dataset.whatsappIndex || 0);
+      trackEvent(`whatsapp-contact-${index + 1}`, `فتح واتساب المكتب ${index + 1}`);
+    }
+  });
   $("#booking-form").addEventListener("submit", issueHoldTicket);
   $("#edit-hold-ticket").addEventListener("click", editHoldTicket);
   $("#print-hold-ticket").addEventListener("click", () => window.print());
