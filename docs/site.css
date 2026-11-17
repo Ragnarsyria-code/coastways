@@ -254,7 +254,13 @@ svg {
 }
 
 .brand .brand-lockup--footer {
-  width: min(248px, 100%);
+  width: 248px;
+  max-width: 100%;
+}
+
+.site-footer .brand {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .brand-copy {
